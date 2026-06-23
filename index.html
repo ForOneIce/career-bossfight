@@ -6,60 +6,69 @@
 <title>她的职业命运图鉴 · 三力觉醒</title>
 <style>
   :root {
-    --pro: #00c6ff;
-    --hard: #f7971e;
-    --soul: #c084fc;
-    --bg: #0d0d1a;
-    --card: #1a1a2e;
-    --border: #2a2a4a;
-    --text: #e8e8f0;
-    --muted: #888aaa;
-    --danger: #ff4757;
-    --success: #2ed573;
-    --warn: #ffa502;
-    --rose: #fb7185;
+    --pro: #0891b2;
+    --pro-bg: rgba(8,145,178,.08);
+    --hard: #e67e22;
+    --hard-bg: rgba(230,126,34,.08);
+    --soul: #a855f7;
+    --soul-bg: rgba(168,85,247,.08);
+    --pink: #e8587a;
+    --pink-light: #fce4ec;
+    --pink-bg: #fff0f3;
+    --bg: #fffaf8;
+    --card: #ffffff;
+    --border: #f0d4dc;
+    --text: #3a2d35;
+    --muted: #8e7a83;
+    --danger: #e74c5e;
+    --danger-bg: #fef2f2;
+    --success: #10b981;
+    --success-bg: #ecfdf5;
+    --warn: #f59e0b;
+    --info-bg: #f5f0ff;
+    --shadow: 0 2px 16px rgba(200,120,140,.10);
+    --shadow-hover: 0 6px 28px rgba(200,120,140,.18);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
+    background-image: radial-gradient(ellipse at 20% 0%, rgba(232,88,122,.06) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 100%, rgba(168,85,247,.05) 0%, transparent 60%);
   }
-  #app { max-width: 760px; margin: 0 auto; padding: 20px 16px 60px; }
+  #app { max-width: 720px; margin: 0 auto; padding: 20px 16px 80px; }
 
   /* ── HEADER ── */
-  .game-title {
-    text-align: center;
-    padding: 36px 0 24px;
-  }
+  .game-title { text-align: center; padding: 40px 0 28px; }
   .game-title h1 {
-    font-size: 2rem; font-weight: 900; letter-spacing: 2px;
-    background: linear-gradient(90deg, var(--pro), var(--soul), var(--rose));
+    font-size: 2.1rem; font-weight: 900; letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--pink), var(--soul));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
-  .game-title p { color: var(--muted); margin-top: 8px; font-size: .95rem; }
+  .game-title p { color: var(--muted); margin-top: 10px; font-size: .95rem; }
   .game-title .sub2 {
-    margin-top: 6px; font-size: .82rem; color: #c084fc99;
-    font-style: italic;
+    margin-top: 8px; font-size: .82rem; color: var(--pink);
+    opacity: .7; font-style: italic;
   }
 
   /* ── SCREEN ── */
-  .screen { display: none; animation: fadeIn .4s ease; }
+  .screen { display: none; animation: fadeIn .5s ease; }
   .screen.active { display: block; }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
 
   /* ── ABILITY LEGEND ── */
-  .legend {
-    display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 24px;
-  }
+  .legend { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 24px; }
   .legend-item {
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 14px 12px; text-align: center;
+    border-radius: 16px; padding: 16px 12px; text-align: center;
+    box-shadow: var(--shadow); transition: transform .25s, box-shadow .25s;
   }
+  .legend-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
   .legend-item .icon { font-size: 1.8rem; }
-  .legend-item .label { font-weight: 700; font-size: .95rem; margin: 6px 0 4px; }
+  .legend-item .label { font-weight: 700; font-size: .95rem; margin: 8px 0 4px; }
   .legend-item .desc { color: var(--muted); font-size: .78rem; line-height: 1.5; }
   .pro .label { color: var(--pro); }
   .hard .label { color: var(--hard); }
@@ -68,232 +77,261 @@
   /* ── STATS BAR ── */
   .stats-panel {
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 14px; padding: 16px; margin-bottom: 20px;
+    border-radius: 16px; padding: 16px 18px; margin-bottom: 20px;
     position: sticky; top: 10px; z-index: 10;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(8px);
   }
   .stats-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
   .stats-row:last-child { margin-bottom: 0; }
   .stats-label { width: 72px; font-size: .82rem; font-weight: 600; flex-shrink: 0; }
-  .bar-track {
-    flex: 1; height: 10px; background: #222240; border-radius: 99px; overflow: hidden;
-  }
-  .bar-fill {
-    height: 100%; border-radius: 99px; transition: width .6s cubic-bezier(.4,0,.2,1);
-  }
-  .bar-fill.pro { background: linear-gradient(90deg, #005c97, var(--pro)); }
-  .bar-fill.hard { background: linear-gradient(90deg, #c25a0a, var(--hard)); }
-  .bar-fill.soul { background: linear-gradient(90deg, #7c3aed, var(--soul)); }
+  .bar-track { flex: 1; height: 10px; background: #f3e8ec; border-radius: 99px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 99px; transition: width .7s cubic-bezier(.4,0,.2,1); }
+  .bar-fill.pro { background: linear-gradient(90deg, #06b6d4, var(--pro)); }
+  .bar-fill.hard { background: linear-gradient(90deg, #f7b955, var(--hard)); }
+  .bar-fill.soul { background: linear-gradient(90deg, #c084fc, var(--soul)); }
   .stats-val { width: 28px; text-align: right; font-size: .85rem; font-weight: 700; }
   .stage-label {
     display: flex; justify-content: space-between; align-items: center;
     font-size: .8rem; color: var(--muted); margin-bottom: 10px;
   }
   .stage-badge {
-    background: linear-gradient(135deg, #1a1a3e, #2a2a5e);
+    background: linear-gradient(135deg, var(--pink-light), #f5e6ff);
     border: 1px solid var(--border); border-radius: 20px;
-    padding: 3px 10px; font-size: .78rem; color: var(--soul);
+    padding: 3px 12px; font-size: .78rem; color: var(--pink); font-weight: 600;
   }
 
   /* ── CARD ── */
   .card {
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 22px; margin-bottom: 16px;
+    border-radius: 18px; padding: 22px; margin-bottom: 16px;
+    box-shadow: var(--shadow);
   }
-  .card h2 { font-size: 1.2rem; margin-bottom: 10px; }
-  .card p { color: var(--muted); line-height: 1.8; font-size: .92rem; }
+  .card h2 { font-size: 1.15rem; margin-bottom: 10px; color: var(--text); }
+  .card p { color: var(--muted); line-height: 1.85; font-size: .92rem; }
 
   /* ── CHAPTER TITLE ── */
-  .chapter-banner {
-    text-align: center; margin: 24px 0 18px;
-  }
+  .chapter-banner { text-align: center; margin: 24px 0 18px; }
   .chapter-banner .year { color: var(--muted); font-size: .82rem; letter-spacing: 1px; }
-  .chapter-banner h2 { font-size: 1.5rem; font-weight: 900; margin: 6px 0 4px; }
+  .chapter-banner h2 {
+    font-size: 1.5rem; font-weight: 900; margin: 6px 0 4px;
+    background: linear-gradient(135deg, var(--pink), var(--soul));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
   .chapter-banner .sub { color: var(--muted); font-size: .88rem; }
 
   /* ── BOTTLENECK ALERT ── */
   .bottleneck {
-    border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;
-    border-left: 4px solid var(--danger); background: rgba(255,71,87,.08);
+    border-radius: 14px; padding: 16px 18px; margin-bottom: 16px;
+    border-left: 4px solid var(--danger); background: var(--danger-bg);
   }
   .bottleneck .bt-title { color: var(--danger); font-weight: 700; font-size: .95rem; margin-bottom: 6px; }
-  .bottleneck p { color: #ffb3bb; font-size: .87rem; line-height: 1.7; }
-  .unlock {
-    border-left-color: var(--success); background: rgba(46,213,115,.08);
-  }
+  .bottleneck p { color: #9a3a4a; font-size: .87rem; line-height: 1.75; }
+  .unlock { border-left-color: var(--success); background: var(--success-bg); }
   .unlock .bt-title { color: var(--success); }
-  .unlock p { color: #b3ffd4; }
-  .info-box {
-    border-left-color: var(--soul); background: rgba(192,132,252,.08);
-  }
+  .unlock p { color: #1a6b4a; }
+  .info-box { border-left-color: var(--soul); background: var(--info-bg); }
   .info-box .bt-title { color: var(--soul); }
-  .info-box p { color: #e4ccff; }
+  .info-box p { color: #5b3a8a; }
+
+  /* ── WARM TIP ── */
+  .warm-tip {
+    position: relative;
+    border-radius: 16px; padding: 20px 22px 18px 52px;
+    margin: 16px 0;
+    background: linear-gradient(135deg, #fff8f0, #fff3f8);
+    border: 1px solid #f5dce0;
+    box-shadow: 0 2px 12px rgba(232,88,122,.06);
+  }
+  .warm-tip::before {
+    content: '🕯️'; position: absolute; left: 18px; top: 20px; font-size: 1.3rem;
+  }
+  .warm-tip .tip-label {
+    font-size: .72rem; color: var(--pink); letter-spacing: 1.5px;
+    text-transform: uppercase; margin-bottom: 8px; font-weight: 600;
+  }
+  .warm-tip .tip-quote {
+    font-size: .93rem; color: #6b4050; line-height: 1.9;
+    font-style: italic; font-weight: 500;
+  }
+  .warm-tip .tip-src {
+    font-size: .72rem; color: var(--muted); margin-top: 10px; text-align: right;
+  }
 
   /* ── CHOICES ── */
   .choices { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
   .choice-btn {
-    background: #1e1e3a; border: 1.5px solid var(--border);
-    border-radius: 12px; padding: 14px 18px; cursor: pointer;
-    text-align: left; transition: all .2s; color: var(--text);
-    font-size: .92rem; line-height: 1.6;
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 16px 20px; cursor: pointer;
+    text-align: left; transition: all .25s; color: var(--text);
+    font-size: .92rem; line-height: 1.6; box-shadow: var(--shadow);
   }
-  .choice-btn:hover { border-color: var(--soul); background: #22224a; transform: translateX(4px); }
+  .choice-btn:hover {
+    border-color: var(--pink); background: var(--pink-bg);
+    transform: translateX(5px); box-shadow: var(--shadow-hover);
+  }
+  .choice-btn:active { transform: translateX(5px) scale(.98); }
   .choice-btn .choice-tag {
-    font-size: .75rem; padding: 2px 8px; border-radius: 20px;
+    font-size: .75rem; padding: 2px 10px; border-radius: 20px;
     margin-bottom: 5px; display: inline-block; font-weight: 600;
   }
-  .tag-pro { background: rgba(0,198,255,.15); color: var(--pro); }
-  .tag-hard { background: rgba(247,151,30,.15); color: var(--hard); }
-  .tag-soul { background: rgba(192,132,252,.15); color: var(--soul); }
-  .tag-neutral { background: rgba(255,255,255,.08); color: var(--muted); }
+  .tag-pro { background: var(--pro-bg); color: var(--pro); }
+  .tag-hard { background: var(--hard-bg); color: var(--hard); }
+  .tag-soul { background: var(--soul-bg); color: var(--soul); }
+  .tag-neutral { background: rgba(0,0,0,.04); color: var(--muted); }
   .choice-effect { font-size: .78rem; color: var(--muted); margin-top: 6px; }
   .effect-pos { color: var(--success); }
   .effect-neg { color: var(--danger); }
 
   /* ── SELF-CHECK ── */
-  .slider-group { margin-bottom: 14px; }
+  .slider-group { margin-bottom: 16px; }
   .slider-group label {
     display: flex; justify-content: space-between; align-items: center;
-    font-size: .88rem; margin-bottom: 6px;
+    font-size: .88rem; margin-bottom: 8px;
   }
   .slider-group label span:first-child { font-weight: 600; }
-  .slider-group input[type=range] { width: 100%; accent-color: var(--pro); cursor: pointer; }
+  .slider-group input[type=range] {
+    width: 100%; accent-color: var(--pink); cursor: pointer;
+    height: 6px; border-radius: 99px;
+  }
+  .slider-group.pro-s input { accent-color: var(--pro); }
   .slider-group.hard-s input { accent-color: var(--hard); }
   .slider-group.soul-s input { accent-color: var(--soul); }
-  .slider-hint { color: var(--muted); font-size: .75rem; margin-top: 3px; }
+  .slider-hint { color: var(--muted); font-size: .75rem; margin-top: 4px; }
 
   /* ── ENDING ── */
   .ending-card {
-    text-align: center; padding: 36px 24px;
-    border-radius: 20px; margin-bottom: 24px;
-    background: linear-gradient(135deg, #1a1a2e, #2a1a3e);
+    text-align: center; padding: 40px 24px;
+    border-radius: 22px; margin-bottom: 24px;
     border: 1px solid var(--border);
+    box-shadow: var(--shadow);
   }
   .ending-icon { font-size: 4rem; margin-bottom: 16px; }
-  .ending-card h2 { font-size: 1.6rem; font-weight: 900; margin-bottom: 10px; }
+  .ending-card h2 {
+    font-size: 1.6rem; font-weight: 900; margin-bottom: 10px; color: var(--text);
+  }
   .ending-card .ending-sub {
-    font-size: .95rem; color: var(--muted); line-height: 1.8;
+    font-size: .95rem; color: var(--muted); line-height: 1.85;
     max-width: 480px; margin: 0 auto 20px;
   }
   .ending-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
   .ending-tag {
-    padding: 4px 14px; border-radius: 20px; font-size: .82rem; font-weight: 600; border: 1px solid;
+    padding: 5px 16px; border-radius: 20px; font-size: .82rem; font-weight: 600;
+    border: 1.5px solid; background: rgba(255,255,255,.6);
   }
   .diagnosis {
-    background: rgba(255,255,255,.04); border-radius: 12px;
-    padding: 16px; text-align: left; margin-bottom: 16px;
+    background: #faf5ff; border-radius: 14px; border: 1px solid #ede4f5;
+    padding: 18px; text-align: left; margin-bottom: 16px;
   }
   .diagnosis h4 { font-size: .9rem; color: var(--muted); margin-bottom: 10px; }
   .diagnosis-item {
     display: flex; align-items: flex-start; gap: 10px;
-    font-size: .88rem; line-height: 1.6; margin-bottom: 8px;
+    font-size: .88rem; line-height: 1.65; margin-bottom: 8px; color: var(--text);
   }
   .diagnosis-item .di-icon { flex-shrink: 0; margin-top: 2px; }
 
   /* ── BOTTLENECK MAP ── */
-  .bt-map {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;
-  }
+  .bt-map { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
   .bt-cell {
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 14px;
+    border-radius: 14px; padding: 14px; box-shadow: var(--shadow);
+    transition: transform .2s;
   }
+  .bt-cell:hover { transform: translateY(-2px); }
   .bt-cell .bt-combo { font-size: .78rem; color: var(--muted); margin-bottom: 5px; }
   .bt-cell .bt-name { font-weight: 700; font-size: .9rem; margin-bottom: 5px; }
-  .bt-cell .bt-desc { font-size: .8rem; color: var(--muted); line-height: 1.5; }
+  .bt-cell .bt-desc { font-size: .8rem; color: var(--muted); line-height: 1.55; }
 
   /* ── BTN ── */
   .btn {
-    display: inline-block; padding: 13px 28px; border-radius: 12px;
+    display: inline-block; padding: 14px 28px; border-radius: 14px;
     font-size: .95rem; font-weight: 700; cursor: pointer; border: none;
-    background: linear-gradient(135deg, #5b21b6, #c084fc);
-    color: #fff; transition: all .2s; letter-spacing: .5px;
+    background: linear-gradient(135deg, var(--pink), #d64d8a);
+    color: #fff; transition: all .25s; letter-spacing: .5px;
     width: 100%; text-align: center; margin-top: 8px;
+    box-shadow: 0 4px 16px rgba(232,88,122,.25);
   }
-  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(192,132,252,.35); }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,88,122,.35); }
+  .btn:active { transform: translateY(0); }
   .btn.secondary {
-    background: transparent; border: 1.5px solid var(--border); color: var(--muted);
+    background: var(--card); border: 1.5px solid var(--border);
+    color: var(--muted); box-shadow: none;
   }
-  .btn.secondary:hover { border-color: var(--soul); color: var(--text); box-shadow: none; }
+  .btn.secondary:hover {
+    border-color: var(--pink); color: var(--pink); box-shadow: none;
+  }
 
   /* ── PROGRESS ── */
   .progress-track {
-    display: flex; gap: 0; margin-bottom: 24px; border-radius: 8px; overflow: hidden;
+    display: flex; gap: 4px; margin-bottom: 24px; border-radius: 8px; overflow: hidden;
   }
-  .progress-step { flex: 1; height: 4px; background: var(--border); transition: background .4s; }
-  .progress-step.done { background: var(--pro); }
-  .progress-step.current { background: var(--soul); }
+  .progress-step {
+    flex: 1; height: 5px; background: #f0d4dc; border-radius: 99px;
+    transition: background .4s;
+  }
+  .progress-step.done { background: linear-gradient(90deg, var(--pink), #f0a0b8); }
+  .progress-step.current { background: linear-gradient(90deg, var(--soul), #c084fc); }
 
   /* ── TABLE ── */
   .ref-table { width: 100%; border-collapse: collapse; font-size: .82rem; margin: 12px 0; }
   .ref-table th {
-    background: rgba(255,255,255,.06); padding: 8px 10px; text-align: left;
-    color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--border);
+    background: var(--pink-light); padding: 10px 10px; text-align: left;
+    color: var(--pink); font-weight: 600; border-bottom: 1px solid var(--border);
   }
-  .ref-table td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,.04); line-height: 1.5; }
+  .ref-table td {
+    padding: 10px; border-bottom: 1px solid #fae8ec; line-height: 1.55;
+    color: var(--text);
+  }
   .ref-table tr:last-child td { border-bottom: none; }
+  .ref-table tr:hover td { background: #fff5f7; }
 
   /* ── CASE CARD ── */
   .case-card {
     display: flex; gap: 12px; align-items: flex-start;
-    margin-bottom: 12px; padding: 14px;
-    background: rgba(192,132,252,.06);
-    border: 1px solid rgba(192,132,252,.15);
-    border-radius: 12px;
+    margin-bottom: 12px; padding: 16px;
+    background: #faf5ff; border: 1px solid #ede4f5;
+    border-radius: 14px; transition: transform .2s;
   }
+  .case-card:hover { transform: translateX(3px); }
   .case-avatar {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: linear-gradient(135deg, #5b21b6, #c084fc);
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink-light), #f0e6ff);
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem; flex-shrink: 0;
+    font-size: 1.2rem; flex-shrink: 0; border: 1px solid var(--border);
   }
   .case-name { font-weight: 700; font-size: .9rem; margin-bottom: 3px; color: var(--text); }
-  .case-role { font-size: .75rem; color: var(--soul); margin-bottom: 5px; }
-  .case-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+  .case-role { font-size: .75rem; color: var(--pink); margin-bottom: 5px; font-weight: 500; }
+  .case-desc { font-size: .82rem; color: var(--muted); line-height: 1.65; }
 
   /* ── FEMALE EXTRA NOTE ── */
   .female-note {
-    border-radius: 10px; padding: 12px 14px; margin-bottom: 14px;
-    background: rgba(251,113,133,.06); border-left: 3px solid var(--rose);
-    font-size: .82rem; color: #fca5a5; line-height: 1.7;
+    border-radius: 14px; padding: 16px 18px; margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff0f3, #fce4ec);
+    border: 1px solid #f5c6d0;
+    font-size: .85rem; color: #8a3a4a; line-height: 1.75;
   }
-  .female-note strong { color: var(--rose); }
+  .female-note strong { color: var(--pink); }
 
   .divider { height: 1px; background: var(--border); margin: 20px 0; }
   .inline-badge {
-    display: inline-block; padding: 1px 7px; border-radius: 10px;
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
     font-size: .75rem; font-weight: 600; vertical-align: middle; margin: 0 2px;
   }
-  .ib-pro { background: rgba(0,198,255,.15); color: var(--pro); }
-  .ib-hard { background: rgba(247,151,30,.15); color: var(--hard); }
-  .ib-soul { background: rgba(192,132,252,.15); color: var(--soul); }
+  .ib-pro { background: var(--pro-bg); color: var(--pro); }
+  .ib-hard { background: var(--hard-bg); color: var(--hard); }
+  .ib-soul { background: var(--soul-bg); color: var(--soul); }
 
-  /* ── WARM TIP ── */
-  .warm-tip {
-    position: relative;
-    border-radius: 14px; padding: 18px 20px 18px 48px;
-    margin: 16px 0;
-    background: linear-gradient(135deg, rgba(255,214,153,.06), rgba(255,182,108,.03));
-    border: 1px solid rgba(255,182,108,.18);
-  }
-  .warm-tip::before {
-    content: '🕯️'; position: absolute; left: 16px; top: 17px; font-size: 1.2rem;
-  }
-  .warm-tip .tip-label {
-    font-size: .72rem; color: rgba(255,200,120,.6); letter-spacing: 1px;
-    text-transform: uppercase; margin-bottom: 6px;
-  }
-  .warm-tip .tip-quote {
-    font-size: .92rem; color: #ffd9a0; line-height: 1.8;
-    font-style: italic; font-weight: 500;
-  }
-  .warm-tip .tip-src {
-    font-size: .72rem; color: rgba(255,200,120,.4); margin-top: 8px; text-align: right;
+  /* ── ARCHETYPE GRID ── */
+  #archetype-grid .choice-btn.selected {
+    border-color: var(--pink); background: var(--pink-bg);
+    box-shadow: 0 0 0 2px rgba(232,88,122,.15);
   }
 
   @media (max-width: 480px) {
     .legend { grid-template-columns: 1fr; }
     .bt-map { grid-template-columns: 1fr; }
     .game-title h1 { font-size: 1.5rem; }
+    #archetype-grid { grid-template-columns: 1fr !important; }
   }
 </style>
 </head>
@@ -329,7 +367,13 @@
   </div>
 
   <div class="female-note">
-    <strong>女性职场特别提示：</strong>社会期待与自我期待的双重压力，常常让女性把"别人认为对的路"走成了自己的路——这正是本性力流失的主要来源。这个游戏帮你把三层能力看清楚。
+    <strong>写在前面：</strong>社会期待与自我期待的双重压力，常常让女性把"别人认为对的路"走成了自己的路——这正是本性力流失的主要来源。这个游戏帮你把三层能力看清楚。无论你走到哪一步，我们都在一起。
+  </div>
+
+  <div class="warm-tip">
+    <div class="tip-label">来自同行姐姐的话</div>
+    <div class="tip-quote">「有些能力是练了会变好的，有些能力是天生如此的，你去硬练只会消耗自己。分清楚这两种，才知道力气该往哪里使。」</div>
+    <div class="tip-src">—— Femai 共学营 · 鱼仔分享</div>
   </div>
 
   <div class="card">
@@ -373,12 +417,12 @@
         <tr>
           <td>成长期</td><td>2–5年</td>
           <td><span class="inline-badge ib-hard">H↑</span> 升级执行与影响力</td>
-          <td>H不够→晋升卡墙，被男同事"抢"资源</td>
+          <td>H不够→晋升卡墙</td>
         </tr>
         <tr>
           <td>瓶颈期</td><td>5–8年</td>
           <td><span class="inline-badge ib-soul">N↑</span> 激活真实方向感</td>
-          <td>N错位→生育/职场两难，中年危机</td>
+          <td>N错位→生育/职场两难</td>
         </tr>
         <tr>
           <td>突破期</td><td>8–15年</td>
@@ -409,7 +453,7 @@
   </div>
 
   <div class="card">
-    <div class="slider-group">
+    <div class="slider-group pro-s">
       <label>
         <span>🔧 专业力 P</span>
         <span id="pv-label" style="color:var(--pro);font-weight:700;">3</span>
@@ -512,6 +556,7 @@
   </div>
   <div class="card"><p id="ch2-story"></p></div>
   <div id="ch2-alert"></div>
+  <div id="ch2-tip"></div>
   <div class="choices" id="ch2-choices"></div>
 </div>
 
@@ -535,6 +580,7 @@
   </div>
   <div class="card"><p id="ch3-story"></p></div>
   <div id="ch3-alert"></div>
+  <div id="ch3-tip"></div>
   <div class="choices" id="ch3-choices"></div>
 </div>
 
@@ -558,6 +604,7 @@
   </div>
   <div class="card"><p id="ch4-story"></p></div>
   <div id="ch4-alert"></div>
+  <div id="ch4-tip"></div>
   <div class="choices" id="ch4-choices"></div>
 </div>
 
@@ -572,6 +619,7 @@
     <div id="ending-stats" class="stats-panel" style="position:static;margin-top:12px;"></div>
     <div id="ending-diagnosis" class="diagnosis" style="margin-top:12px;"></div>
   </div>
+  <div id="ending-tip"></div>
   <div class="card">
     <h2>👩 参照她们的故事</h2>
     <div id="ending-cases"></div>
@@ -590,7 +638,7 @@ const state = { P:3, H:3, N:3, arch:'tech', choices:[] };
 function goTo(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
 function applyDelta(p,h,n){
@@ -625,12 +673,19 @@ function makeAlert(type,title,body){
   const cls = type==='danger'?'bottleneck': type==='info'?'bottleneck info-box':'bottleneck unlock';
   return `<div class="${cls}"><div class="bt-title">${title}</div><p>${body}</p></div>`;
 }
+function makeTip(quote, note){
+  return `<div class="warm-tip">
+    <div class="tip-label">来自同行姐姐的话</div>
+    <div class="tip-quote">「${quote}」</div>
+    ${note ? `<div class="tip-src">${note}</div>` : ''}
+  </div>`;
+}
 
 // ════════════════ SETUP ════════════════
 let selectedArch=null;
 function pickArchetype(el,arch){
-  document.querySelectorAll('#archetype-grid .choice-btn').forEach(b=>b.style.borderColor='');
-  el.style.borderColor='var(--soul)';
+  document.querySelectorAll('#archetype-grid .choice-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
   selectedArch=arch;
 }
 function startGame(){
@@ -656,6 +711,11 @@ function loadChapter1(){
   document.getElementById('ch1-alert').innerHTML = state.P<=4
     ? makeAlert('danger','⚠️ 卡点预警：专业根基不稳',`专业力偏弱（当前${state.P}分）。立足期最大风险：基本交付出问题，女性在职场中本就需要更多"实力证明"，专业不过关会被快速贴标签、边缘化，试用期淘汰风险高。`)
     : makeAlert('unlock','✅ 专业基础扎实',`专业力（${state.P}分）还不错。立足期除了持续夯实专业，可以开始有意识地练习"让专业被看见"——这是女性职场中常被忽视的硬通货。`);
+
+  document.getElementById('ch1-tip').innerHTML = makeTip(
+    '有些能力是练了会变好的，有些能力是天生如此的，你去硬练只会消耗自己。',
+    '别急着否定自己，先分清楚哪些可以练、哪些该接纳 —— Femai 共学营 · 鱼仔'
+  );
 
   document.getElementById('ch1-choices').innerHTML=`
     <div class="choice-btn" onclick="ch1Choice('A')">
@@ -716,6 +776,11 @@ function loadChapter2(){
     : state.P<=4
     ? makeAlert('danger','⚠️ 空心风险预警',`专业力偏弱（${state.P}分）。小心成为"会说不会做"的空心管理者，下属和同行会质疑你的专业判断，遇到硬仗容易穿帮，女性在这一点上被放大审视的概率更高。`)
     : makeAlert('unlock','💪 成长期状态良好',`专业和硬通货都有一定基础（P:${state.P} H:${state.H}），现在是构建「复合竞争力」的最佳窗口。`);
+
+  document.getElementById('ch2-tip').innerHTML = makeTip(
+    '你越早接受市场的审判，市场越早给你真实的答案。',
+    '晋升受阻不是终点，是市场在告诉你下一步该补什么 —— Femai 共学营 · 鱼仔'
+  );
 
   document.getElementById('ch2-choices').innerHTML=`
     <div class="choice-btn" onclick="ch2Choice('A')">
@@ -781,6 +846,11 @@ function loadChapter3(){
     ? makeAlert('danger','🌬️ 危险：两翼不振',`专业和硬通货同时偏弱，本性热情虽在，但无法变现。容易陷入"有热情没出路"的空转，随着年龄增长焦虑感会持续累积。`)
     : makeAlert('info','🔑 瓶颈期关键提示',`此刻最重要的任务是：找到本性力与专业力的交叉点。"你最擅长的"和"你最热爱的"的重叠区域，才是真正属于你、别人无法复制的护城河。`);
 
+  document.getElementById('ch3-tip').innerHTML = makeTip(
+    '你完全有能力把一条不那么正确的路走对。你不需要选择对的路，因为你走的每一条路都是对的。',
+    '站在岔路口的你，不必恐惧选错，每一步都算数 —— Femai 共学营 · 鱼仔'
+  );
+
   document.getElementById('ch3-choices').innerHTML=`
     <div class="choice-btn" onclick="ch3Choice('A')">
       <span class="choice-tag tag-soul">顺应本性</span>
@@ -845,6 +915,11 @@ function loadChapter4(){
     ? makeAlert('danger','⚠️ 最后警告：本性力严重缺失',`本性力仍只有${state.N}分。突破期之后若本性依然错位，职业成熟期将陷入彻底的空洞——高收入高地位，但完全丧失意义感，这种状态对女性的身心消耗尤为剧烈。`)
     : makeAlert('info','📍 突破期核心命题',`你现在要思考的不是「如何更努力」，而是「如何把三力组合成只属于你的独特定位」——你的性别、你的视角、你的经历，都是组合中的独特变量。`);
 
+  document.getElementById('ch4-tip').innerHTML = makeTip(
+    '认清自己，才是职场最值钱的能力。能练的，找方法去练；天生的，找场景去用。',
+    '走到这里的你，已经比大多数人更勇敢了 —— Femai 共学营 · 鱼仔'
+  );
+
   document.getElementById('ch4-choices').innerHTML=`
     <div class="choice-btn" onclick="ch4Choice('A')">
       <span class="choice-tag tag-soul">创业/独立</span>
@@ -888,13 +963,13 @@ function ch4Choice(c){
 }
 
 // ════════════════════════════════════════
-// ENDINGS  （全部参照案例均为女性）
+// ENDINGS
 // ════════════════════════════════════════
 const ENDINGS = {
 
   apex: {
     icon:'🏆', title:'全栖达人',
-    grad:'linear-gradient(135deg,#0a2a0a,#1a4a1a)', border:'var(--success)',
+    grad:'linear-gradient(135deg,#ecfdf5,#d1fae5)', border:'var(--success)',
     tags:[{l:'三力通达',c:'var(--success)'},{l:'真实整合',c:'var(--soul)'}],
     sub:'你完成了最难的事：让「你最擅长的」「你最热爱的」「市场最需要的」高度重合。这不是运气——是十年以上持续自我校准的结果，也是极少数人能做到的事。',
     cases:[
@@ -905,7 +980,7 @@ const ENDINGS = {
 
   expert: {
     icon:'🧠', title:'行业顶尖专家',
-    grad:'linear-gradient(135deg,#001a3a,#002a5a)', border:'var(--pro)',
+    grad:'linear-gradient(135deg,#ecfeff,#cffafe)', border:'var(--pro)',
     tags:[{l:'专业极深',c:'var(--pro)'},{l:'影响力待放大',c:'var(--warn)'}],
     sub:'你是业内真正懂行的人，专业深度是真实的护城河。但专业的边界也限制了你的杠杆——下一步是学会把专业力通过内容、演讲、社群放大成更广泛的影响力。',
     cases:[
@@ -916,7 +991,7 @@ const ENDINGS = {
 
   manager: {
     icon:'🎙️', title:'组织力量者',
-    grad:'linear-gradient(135deg,#2a1500,#4a2800)', border:'var(--hard)',
+    grad:'linear-gradient(135deg,#fffbeb,#fef3c7)', border:'var(--hard)',
     tags:[{l:'组织能力强',c:'var(--hard)'},{l:'专业需守住底线',c:'var(--warn)'}],
     sub:'你是团队的粘合剂与推进器，硬通货能力让你驾驭复杂组织。但管理者若无专业底气，攻坚时容易失去团队信任——务必保留一个"能打硬仗"的专业领域，这是你的底牌。',
     cases:[
@@ -927,7 +1002,7 @@ const ENDINGS = {
 
   dreamer: {
     icon:'🌬️', title:'空想怀才者',
-    grad:'linear-gradient(135deg,#1a1a2e,#2a2a4e)', border:'var(--muted)',
+    grad:'linear-gradient(135deg,#f5f3ff,#ede9fe)', border:'var(--muted)',
     tags:[{l:'方向感强烈',c:'var(--soul)'},{l:'落地能力待建',c:'var(--danger)'}],
     sub:'你清楚自己热爱什么，这极为珍贵。但热爱本身不能当饭吃——你需要用专业力把天赋变成技能，用硬通货力把技能变成可交付的价值。热情是引擎，能力是轮子，两者缺一不可。',
     cases:[
@@ -938,7 +1013,7 @@ const ENDINGS = {
 
   burnout: {
     icon:'💀', title:'高薪内耗者',
-    grad:'linear-gradient(135deg,#1a0520,#2a0a30)', border:'var(--soul)',
+    grad:'linear-gradient(135deg,#fdf2f8,#fce7f3)', border:'var(--pink)',
     tags:[{l:'外部成功',c:'var(--hard)'},{l:'内在空洞',c:'var(--danger)'}],
     sub:'你拿到了世俗意义上的大部分：职位、薪资、认可。但你知道那个「活着」的感觉越来越遥远。这不是矫情——是生命力的耗竭信号。在下一个十年开始前，你必须找到你的N，否则外部成就感会彻底蒸发。',
     cases:[
@@ -949,7 +1024,7 @@ const ENDINGS = {
 
   wounded: {
     icon:'💔', title:'带伤创业者',
-    grad:'linear-gradient(135deg,#2a0505,#4a0f0f)', border:'var(--danger)',
+    grad:'linear-gradient(135deg,#fef2f2,#fee2e2)', border:'var(--danger)',
     tags:[{l:'勇气满分',c:'var(--warn)'},{l:'本性根基不稳',c:'var(--danger)'}],
     sub:'你选择了创业，但本性力尚未稳固时就出发，导致方向漂移、动力断续。这次失败是宝贵的学费：先回去补本性力，搞清楚「你真正要解决的问题是什么」，再次出发成功率将大幅提高。',
     cases:[
@@ -960,7 +1035,7 @@ const ENDINGS = {
 
   evolving: {
     icon:'🌀', title:'持续进化中',
-    grad:'linear-gradient(135deg,#1a1a2e,#2a2a4e)', border:'var(--pro)',
+    grad:'linear-gradient(135deg,#f5f3ff,#ede9fe)', border:'var(--soul)',
     tags:[{l:'均衡稳健',c:'var(--muted)'},{l:'尚无突出壁垒',c:'var(--warn)'}],
     sub:'你各方面都还OK，但还没有形成真正的差异化壁垒。此刻需要一个决断：在三力中选一个「主轴」深度突破，而非继续均匀分散。中庸在职场长跑中，是最温和的慢性风险。',
     cases:[
@@ -1004,6 +1079,11 @@ function showEnding(){
 
   document.getElementById('ending-diagnosis').innerHTML=`<h4>📋 行动建议</h4>${recP}${recH}${recN}${recAll}`;
 
+  document.getElementById('ending-tip').innerHTML = makeTip(
+    '你完全有能力把一条不那么正确的路走对。你不需要选择对的路，因为你走的每一条路都是对的。',
+    '无论你走到了哪个结局，这段旅程本身就是答案。我们一直在一起 —— Femai 共学营'
+  );
+
   document.getElementById('ending-cases').innerHTML=e.cases.map(c=>`
     <div class="case-card">
       <div class="case-avatar">${c.av}</div>
@@ -1023,7 +1103,7 @@ function restart(){
     document.getElementById(id).value=3;
     document.getElementById(id+'-label').textContent='3';
   });
-  document.querySelectorAll('#archetype-grid .choice-btn').forEach(b=>b.style.borderColor='');
+  document.querySelectorAll('#archetype-grid .choice-btn').forEach(b=>b.classList.remove('selected'));
   goTo('s-assess');
 }
 </script>
