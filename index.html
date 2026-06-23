@@ -122,11 +122,12 @@
 
   /* ── BOTTLENECK ALERT ── */
   .bottleneck {
-    border-radius: 14px; padding: 16px 18px; margin-bottom: 16px;
-    border-left: 4px solid var(--danger); background: var(--danger-bg);
+    border-radius: 12px; padding: 12px 14px; margin-bottom: 12px;
+    border-left: 3px solid var(--danger); background: var(--danger-bg);
+    font-size: .85rem;
   }
-  .bottleneck .bt-title { color: var(--danger); font-weight: 700; font-size: .95rem; margin-bottom: 6px; }
-  .bottleneck p { color: #9a3a4a; font-size: .87rem; line-height: 1.75; }
+  .bottleneck .bt-title { color: var(--danger); font-weight: 700; font-size: .85rem; margin-bottom: 4px; }
+  .bottleneck p { color: #9a3a4a; font-size: .82rem; line-height: 1.7; }
   .unlock { border-left-color: var(--success); background: var(--success-bg); }
   .unlock .bt-title { color: var(--success); }
   .unlock p { color: #1a6b4a; }
@@ -137,49 +138,96 @@
   /* ── WARM TIP ── */
   .warm-tip {
     position: relative;
-    border-radius: 16px; padding: 20px 22px 18px 52px;
-    margin: 16px 0;
+    border-radius: 12px; padding: 14px 16px 12px 42px;
+    margin: 10px 0;
     background: linear-gradient(135deg, #fff8f0, #fff3f8);
     border: 1px solid #f5dce0;
-    box-shadow: 0 2px 12px rgba(232,88,122,.06);
   }
   .warm-tip::before {
-    content: '🕯️'; position: absolute; left: 18px; top: 20px; font-size: 1.3rem;
+    content: '🕯️'; position: absolute; left: 14px; top: 14px; font-size: 1.1rem;
   }
   .warm-tip .tip-label {
-    font-size: .72rem; color: var(--pink); letter-spacing: 1.5px;
-    text-transform: uppercase; margin-bottom: 8px; font-weight: 600;
+    font-size: .68rem; color: var(--pink); letter-spacing: 1.5px;
+    text-transform: uppercase; margin-bottom: 4px; font-weight: 600;
   }
   .warm-tip .tip-quote {
-    font-size: .93rem; color: #6b4050; line-height: 1.9;
+    font-size: .85rem; color: #6b4050; line-height: 1.8;
     font-style: italic; font-weight: 500;
   }
   .warm-tip .tip-src {
-    font-size: .72rem; color: var(--muted); margin-top: 10px; text-align: right;
+    font-size: .68rem; color: var(--muted); margin-top: 6px; text-align: right;
+  }
+
+  /* ── SECTION HEADING ── */
+  .section-head {
+    font-size: .82rem; color: var(--muted); font-weight: 600;
+    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+  }
+  .section-head::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* ── CHOICE PROMPT ── */
+  .choice-prompt {
+    text-align: center; margin: 28px 0 16px; position: relative;
+  }
+  .choice-prompt::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 50%;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--pink), transparent);
+  }
+  .choice-prompt span {
+    position: relative; display: inline-block;
+    background: var(--bg); padding: 0 16px;
+    font-size: .92rem; font-weight: 700; color: var(--pink);
+    letter-spacing: 1px;
   }
 
   /* ── CHOICES ── */
-  .choices { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .choices { display: flex; flex-direction: column; gap: 12px; }
   .choice-btn {
-    background: var(--card); border: 1.5px solid var(--border);
-    border-radius: 14px; padding: 16px 20px; cursor: pointer;
-    text-align: left; transition: all .25s; color: var(--text);
-    font-size: .92rem; line-height: 1.6; box-shadow: var(--shadow);
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-left: 4px solid var(--border);
+    border-radius: 14px; padding: 16px 20px 16px 54px;
+    cursor: pointer; text-align: left; transition: all .25s;
+    color: var(--text); font-size: .92rem; line-height: 1.6;
+    box-shadow: var(--shadow); position: relative;
+  }
+  .choice-btn .choice-num {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #f3e8ec; color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .82rem; font-weight: 800; transition: all .25s;
+  }
+  .choice-btn .choice-arrow {
+    position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    color: #e0c8d0; font-size: 1rem; transition: all .25s;
   }
   .choice-btn:hover {
-    border-color: var(--pink); background: var(--pink-bg);
-    transform: translateX(5px); box-shadow: var(--shadow-hover);
+    border-color: var(--pink); border-left-color: var(--pink);
+    background: var(--pink-bg);
+    transform: translateX(4px); box-shadow: var(--shadow-hover);
   }
-  .choice-btn:active { transform: translateX(5px) scale(.98); }
+  .choice-btn:hover .choice-num {
+    background: var(--pink); color: #fff;
+  }
+  .choice-btn:hover .choice-arrow { color: var(--pink); transform: translateY(-50%) translateX(3px); }
+  .choice-btn:active { transform: translateX(4px) scale(.98); }
   .choice-btn .choice-tag {
-    font-size: .75rem; padding: 2px 10px; border-radius: 20px;
-    margin-bottom: 5px; display: inline-block; font-weight: 600;
+    font-size: .72rem; padding: 2px 10px; border-radius: 20px;
+    margin-bottom: 6px; display: inline-block; font-weight: 600;
   }
   .tag-pro { background: var(--pro-bg); color: var(--pro); }
   .tag-hard { background: var(--hard-bg); color: var(--hard); }
   .tag-soul { background: var(--soul-bg); color: var(--soul); }
   .tag-neutral { background: rgba(0,0,0,.04); color: var(--muted); }
-  .choice-effect { font-size: .78rem; color: var(--muted); margin-top: 6px; }
+
+  .choice-btn.tag-pro-border { border-left-color: var(--pro); }
+  .choice-btn.tag-hard-border { border-left-color: var(--hard); }
+  .choice-btn.tag-soul-border { border-left-color: var(--soul); }
+
+  .choice-effect { font-size: .76rem; color: var(--muted); margin-top: 8px; padding-top: 6px; border-top: 1px dashed #f0d4dc; }
   .effect-pos { color: var(--success); }
   .effect-neg { color: var(--danger); }
 
@@ -438,6 +486,7 @@
     </table>
   </div>
 
+  <div class="choice-prompt"><span>准备好了吗？</span></div>
   <button class="btn" onclick="goTo('s-assess')">▶ 开始你的职业冒险</button>
 </div>
 
@@ -530,10 +579,11 @@
     <h2>🌱 立足期：生存第一</h2>
     <div class="sub">刚入职，一切从零开始，怎么站稳脚跟是唯一命题</div>
   </div>
+  <div class="section-head">📖 你的处境</div>
   <div class="card"><p id="ch1-story"></p></div>
   <div id="ch1-alert"></div>
   <div id="ch1-tip"></div>
-  <div class="choices" id="ch1-choices"></div>
+  <div id="ch1-choices"></div>
 </div>
 
 
@@ -554,10 +604,11 @@
     <h2>📈 成长期：晋升争夺</h2>
     <div class="sub">站稳了脚跟，天花板开始悄悄压下来</div>
   </div>
+  <div class="section-head">📖 你的处境</div>
   <div class="card"><p id="ch2-story"></p></div>
   <div id="ch2-alert"></div>
   <div id="ch2-tip"></div>
-  <div class="choices" id="ch2-choices"></div>
+  <div id="ch2-choices"></div>
 </div>
 
 
@@ -578,10 +629,11 @@
     <h2>🧱 瓶颈期：命运岔路</h2>
     <div class="sub">有了资历，内外压力同时袭来，是最考验本性的时刻</div>
   </div>
+  <div class="section-head">📖 你的处境</div>
   <div class="card"><p id="ch3-story"></p></div>
   <div id="ch3-alert"></div>
   <div id="ch3-tip"></div>
-  <div class="choices" id="ch3-choices"></div>
+  <div id="ch3-choices"></div>
 </div>
 
 
@@ -602,10 +654,11 @@
     <h2>🚀 突破期：构建壁垒</h2>
     <div class="sub">你开始真正看清自己的筹码，以及真正在意的东西</div>
   </div>
+  <div class="section-head">📖 你的处境</div>
   <div class="card"><p id="ch4-story"></p></div>
   <div id="ch4-alert"></div>
   <div id="ch4-tip"></div>
-  <div class="choices" id="ch4-choices"></div>
+  <div id="ch4-choices"></div>
 </div>
 
 
@@ -718,37 +771,48 @@ function loadChapter1(){
   );
 
   document.getElementById('ch1-choices').innerHTML=`
-    <div class="choice-btn" onclick="ch1Choice('A')">
+    <div class="choice-prompt"><span>👇 做出你的选择</span></div>
+    <div class="choices">
+    <div class="choice-btn tag-pro-border" onclick="ch1Choice('A')">
+      <span class="choice-num">A</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-pro">专业优先</span>
       <strong>「专注钻研，成为团队里最懂业务的人，用实力建立话语权」</strong>
       <div class="choice-effect">
         <span class="effect-pos">🔧 专业力 +3</span>&nbsp;
-        <span class="effect-neg">⚡ 硬通货 -1（忽略了影响力建设）</span>
+        <span class="effect-neg">⚡ 硬通货 -1</span>
       </div>
     </div>
-    <div class="choice-btn" onclick="ch1Choice('B')">
+    <div class="choice-btn tag-hard-border" onclick="ch1Choice('B')">
+      <span class="choice-num">B</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-hard">硬通货优先</span>
       <strong>「主动揽活，跨部门帮忙，建立信任网络，主动表达观点」</strong>
       <div class="choice-effect">
         <span class="effect-pos">⚡ 硬通货 +3</span>&nbsp;
-        <span class="effect-neg">🔧 专业力 +1（基础打得不够深）</span>
+        <span class="effect-neg">🔧 专业力 +1</span>
       </div>
     </div>
-    <div class="choice-btn" onclick="ch1Choice('C')">
+    <div class="choice-btn tag-soul-border" onclick="ch1Choice('C')">
+      <span class="choice-num">C</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-soul">本性探索</span>
       <strong>「一边工作一边认真问自己：这条路我真的喜欢吗？」</strong>
       <div class="choice-effect">
         <span class="effect-pos">🌸 本性力 +2</span>&nbsp;
-        <span class="effect-neg">🔧+1 ⚡+1（早期分心代价真实存在）</span>
+        <span class="effect-neg">🔧+1 ⚡+1</span>
       </div>
     </div>
     <div class="choice-btn" onclick="ch1Choice('D')">
+      <span class="choice-num">D</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-neutral">均衡投入</span>
       <strong>「白天精进技能，晚上学方法论，保持对自我的持续感知」</strong>
       <div class="choice-effect">
         <span class="effect-pos">🔧+1 ⚡+1 🌸+1</span>&nbsp;
         <span class="effect-neg">（稳健但各项进步较慢）</span>
       </div>
+    </div>
     </div>`;
 }
 function ch1Choice(c){
@@ -783,37 +847,47 @@ function loadChapter2(){
   );
 
   document.getElementById('ch2-choices').innerHTML=`
-    <div class="choice-btn" onclick="ch2Choice('A')">
+    <div class="choice-prompt"><span>👇 做出你的选择</span></div>
+    <div class="choices">
+    <div class="choice-btn tag-hard-border" onclick="ch2Choice('A')">
+      <span class="choice-num">A</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-hard">补硬通货</span>
       <strong>「主动请缨跨部门项目，练习目标拆解、向上汇报与团队影响力」</strong>
       <div class="choice-effect">
         <span class="effect-pos">⚡ 硬通货 +3</span>&nbsp;
-        <span class="effect-neg">🔧 专业力 +0（深度暂时停止增长）</span>
+        <span class="effect-neg">🔧 专业力 +0</span>
       </div>
     </div>
-    <div class="choice-btn" onclick="ch2Choice('B')">
+    <div class="choice-btn tag-pro-border" onclick="ch2Choice('B')">
+      <span class="choice-num">B</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-pro">极致专业</span>
       <strong>「成为行业内稀缺的专家，靠不可替代性重新定价自己」</strong>
       <div class="choice-effect">
         <span class="effect-pos">🔧 专业力 +3</span>&nbsp;
-        <span class="effect-neg">⚡ 硬通货 -1（依然单打独斗模式）</span>
+        <span class="effect-neg">⚡ 硬通货 -1</span>
       </div>
     </div>
-    <div class="choice-btn" onclick="ch2Choice('C')">
+    <div class="choice-btn tag-soul-border" onclick="ch2Choice('C')">
+      <span class="choice-num">C</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-soul">内省方向</span>
       <strong>「认真问自己：我真的想继续在这个方向走下去吗？」</strong>
       <div class="choice-effect">
         <span class="effect-pos">🌸 本性力 +3</span>&nbsp;
-        <span class="effect-neg">🔧+0 ⚡+0（短期职场收益为零）</span>
+        <span class="effect-neg">🔧+0 ⚡+0</span>
       </div>
     </div>
-    <div class="choice-btn" onclick="ch2Choice('D')">
+    <div class="choice-btn tag-hard-border" onclick="ch2Choice('D')">
+      <span class="choice-num">D</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-hard">系统进修</span>
       <strong>「副带一个小项目组，同时系统学习管理和结构化思维」</strong>
       <div class="choice-effect">
-        <span class="effect-pos">⚡ 硬通货 +2 🌸 本性力 +1</span>&nbsp;
-        <span class="effect-neg">🔧 +0</span>
+        <span class="effect-pos">⚡ 硬通货 +2 🌸 本性力 +1</span>
       </div>
+    </div>
     </div>`;
 }
 function ch2Choice(c){
@@ -852,37 +926,48 @@ function loadChapter3(){
   );
 
   document.getElementById('ch3-choices').innerHTML=`
-    <div class="choice-btn" onclick="ch3Choice('A')">
+    <div class="choice-prompt"><span>👇 做出你的选择</span></div>
+    <div class="choices">
+    <div class="choice-btn tag-soul-border" onclick="ch3Choice('A')">
+      <span class="choice-num">A</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-soul">顺应本性</span>
-      <strong>「暂离职场，用半年到一年时间系统探索真正热爱的方向，哪怕薪资归零」</strong>
+      <strong>「暂离职场，系统探索真正热爱的方向，哪怕薪资归零」</strong>
       <div class="choice-effect">
         <span class="effect-pos">🌸 本性力 +4</span>&nbsp;
-        <span class="effect-neg">🔧 -1 ⚡ -1（代价真实，但可能是最值的投资）</span>
+        <span class="effect-neg">🔧 -1 ⚡ -1</span>
       </div>
     </div>
-    <div class="choice-btn" onclick="ch3Choice('B')">
+    <div class="choice-btn tag-hard-border" onclick="ch3Choice('B')">
+      <span class="choice-num">B</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-hard">跨越平台</span>
-      <strong>「跳到头部公司，用更大舞台加速专业与影响力的双向提升」</strong>
+      <strong>「跳到头部公司，用更大舞台加速专业与影响力提升」</strong>
       <div class="choice-effect">
-        <span class="effect-pos">🔧 专业力 +2 ⚡ 硬通货 +2</span>&nbsp;
-        <span class="effect-neg">🌸 本性力 +0（根本问题未解）</span>
+        <span class="effect-pos">🔧+2 ⚡+2</span>&nbsp;
+        <span class="effect-neg">🌸 +0</span>
       </div>
     </div>
-    <div class="choice-btn" onclick="ch3Choice('C')">
+    <div class="choice-btn tag-pro-border" onclick="ch3Choice('C')">
+      <span class="choice-num">C</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-pro">极致深耕</span>
-      <strong>「在当前赛道成为顶级专家，靠极致稀缺性重新定价自己」</strong>
+      <strong>「在当前赛道成为顶级专家，靠极致稀缺性重新定价」</strong>
       <div class="choice-effect">
         <span class="effect-pos">🔧 专业力 +4</span>&nbsp;
-        <span class="effect-neg">⚡ +0 🌸 +0（路更窄，护城河更深）</span>
+        <span class="effect-neg">⚡+0 🌸+0</span>
       </div>
     </div>
-    <div class="choice-btn" onclick="ch3Choice('D')">
+    <div class="choice-btn tag-soul-border" onclick="ch3Choice('D')">
+      <span class="choice-num">D</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-soul">迁移转型</span>
-      <strong>「把积累的专业力迁移到本性更契合的新赛道，承担过渡期代价」</strong>
+      <strong>「把专业力迁移到本性更契合的新赛道，承担过渡期代价」</strong>
       <div class="choice-effect">
-        <span class="effect-pos">🌸 本性力 +3 🔧 专业力 +1</span>&nbsp;
-        <span class="effect-neg">⚡ +0（过渡期需要勇气和现金储备）</span>
+        <span class="effect-pos">🌸+3 🔧+1</span>&nbsp;
+        <span class="effect-neg">⚡+0</span>
       </div>
+    </div>
     </div>`;
 }
 function ch3Choice(c){
@@ -921,36 +1006,47 @@ function loadChapter4(){
   );
 
   document.getElementById('ch4-choices').innerHTML=`
-    <div class="choice-btn" onclick="ch4Choice('A')">
+    <div class="choice-prompt"><span>👇 做出你的选择</span></div>
+    <div class="choices">
+    <div class="choice-btn tag-soul-border" onclick="ch4Choice('A')">
+      <span class="choice-num">A</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-soul">创业/独立</span>
       <strong>「以本性为核心，整合三力，做自己的产品/IP/公司」</strong>
       <div class="choice-effect">
         <span class="effect-pos">🌸+3 🔧+1 ⚡+2</span>&nbsp;
-        <span class="effect-neg">（N≥6才有成功基础，否则方向会持续漂移）</span>
+        <span class="effect-neg">N≥6才有成功基础</span>
       </div>
     </div>
-    <div class="choice-btn" onclick="ch4Choice('B')">
+    <div class="choice-btn tag-pro-border" onclick="ch4Choice('B')">
+      <span class="choice-num">B</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-pro">专家定位</span>
       <strong>「做顾问/讲师/独立专家，把专业力直接货币化」</strong>
       <div class="choice-effect">
-        <span class="effect-pos">🔧 专业力 +2 🌸 本性力 +2 ⚡+1</span>
+        <span class="effect-pos">🔧+2 🌸+2 ⚡+1</span>
       </div>
     </div>
-    <div class="choice-btn" onclick="ch4Choice('C')">
+    <div class="choice-btn tag-hard-border" onclick="ch4Choice('C')">
+      <span class="choice-num">C</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-hard">职业经理人</span>
       <strong>「进头部公司做中高层，以硬通货力换平台资源与更大影响力」</strong>
       <div class="choice-effect">
-        <span class="effect-pos">⚡ 硬通货 +3 🔧+1</span>&nbsp;
-        <span class="effect-neg">🌸 +0</span>
+        <span class="effect-pos">⚡+3 🔧+1</span>&nbsp;
+        <span class="effect-neg">🌸+0</span>
       </div>
     </div>
     <div class="choice-btn" onclick="ch4Choice('D')">
+      <span class="choice-num">D</span>
+      <span class="choice-arrow">›</span>
       <span class="choice-tag tag-neutral">三力整合</span>
-      <strong>「沉淀两年，把三力凝练成一个独特的个人方法论/品牌/社群」</strong>
+      <strong>「沉淀两年，把三力凝练成独特的个人方法论/品牌/社群」</strong>
       <div class="choice-effect">
         <span class="effect-pos">🔧+2 ⚡+2 🌸+2</span>&nbsp;
-        <span class="effect-neg">（最慢，但结局最扎实）</span>
+        <span class="effect-neg">最慢，但结局最扎实</span>
       </div>
+    </div>
     </div>`;
 }
 function ch4Choice(c){
