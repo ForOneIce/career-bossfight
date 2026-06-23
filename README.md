@@ -54,4 +54,6 @@ npx serve .
 
 ## License
 
-MIT
+**Proprietary — All Rights Reserved**
+
+本项目代码及内容版权归 [ForOneIce](https://github.com/ForOneIce) 所有。允许查看和学习，**禁止任何形式的商业使用**。如需商业授权请联系作者。详见 [LICENSE](./LICENSE)。
