@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>她的职业命运图鉴 · 三力觉醒</title>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
   :root {
     --pro: #0891b2;
@@ -375,11 +376,118 @@
     box-shadow: 0 0 0 2px rgba(232,88,122,.15);
   }
 
+  /* ── SHARE CARD ── */
+  #share-card {
+    background: #fffaf8; border-radius: 22px; padding: 32px 24px 24px;
+    overflow: hidden; position: relative;
+  }
+  #share-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--pro), var(--pink), var(--soul));
+  }
+  .share-card-title {
+    text-align: center; font-size: .78rem; color: var(--muted);
+    letter-spacing: 1px; margin-bottom: 16px;
+  }
+  .share-card-stats {
+    display: flex; gap: 12px; justify-content: center; margin: 16px 0;
+  }
+  .share-stat {
+    text-align: center; flex: 1; max-width: 140px;
+    background: #fff; border-radius: 12px; padding: 12px 8px;
+    border: 1px solid var(--border);
+  }
+  .share-stat .ss-val { font-size: 1.6rem; font-weight: 900; }
+  .share-stat .ss-label { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+  .share-card-quote {
+    text-align: center; font-size: .82rem; color: var(--muted);
+    font-style: italic; margin: 16px 0 12px; line-height: 1.7;
+  }
+  .share-card-footer {
+    text-align: center; font-size: .7rem; color: #cbb8c0;
+    margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border);
+  }
+
+  /* ── SHARE ACTIONS ── */
+  .share-actions {
+    display: flex; gap: 10px; margin: 20px 0 16px;
+  }
+  .share-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 12px 10px; border-radius: 12px; font-size: .85rem; font-weight: 600;
+    cursor: pointer; border: 1.5px solid var(--border); background: var(--card);
+    color: var(--text); transition: all .2s; box-shadow: var(--shadow);
+  }
+  .share-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+  .share-btn:active { transform: translateY(0); }
+  .share-btn .share-icon { font-size: 1.1rem; }
+  .share-btn.btn-download { border-color: var(--pink); color: var(--pink); }
+  .share-btn.btn-download:hover { background: var(--pink-bg); }
+  .share-btn.btn-x { border-color: #1d9bf0; color: #1d9bf0; }
+  .share-btn.btn-x:hover { background: #f0f9ff; }
+  .share-btn.btn-xhs { border-color: #fe2c55; color: #fe2c55; }
+  .share-btn.btn-xhs:hover { background: #fff0f3; }
+
+  .toast {
+    position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+    background: var(--text); color: #fff; padding: 10px 24px;
+    border-radius: 99px; font-size: .85rem; font-weight: 500;
+    z-index: 999; opacity: 0; transition: opacity .3s;
+    pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,.2);
+  }
+  .toast.show { opacity: 1; }
+
+  /* ── FAB FLOAT ── */
+  .fab {
+    position: fixed; bottom: 28px; z-index: 100;
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; cursor: pointer;
+    background: var(--card); border: 1.5px solid var(--border);
+    box-shadow: 0 3px 14px rgba(200,120,140,.18);
+    transition: all .25s;
+  }
+  .fab:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(200,120,140,.28); }
+  .fab-left { left: 18px; }
+  .fab-right { right: 18px; }
+  .fab-popup {
+    position: fixed; z-index: 101;
+    bottom: 80px; padding: 12px 16px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; box-shadow: 0 6px 28px rgba(100,60,80,.15);
+    font-size: .82rem; color: var(--text); line-height: 1.6;
+    opacity: 0; transform: translateY(8px); pointer-events: none;
+    transition: all .25s;
+    max-width: 220px;
+  }
+  .fab-popup.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .fab-popup-left { left: 18px; }
+  .fab-popup-right { right: 18px; }
+  .fab-popup .fp-name { font-weight: 700; margin-bottom: 4px; }
+  .fab-popup .fp-role { font-size: .75rem; color: var(--muted); margin-bottom: 8px; }
+  .fab-popup .fp-link {
+    display: inline-block; padding: 5px 14px; border-radius: 8px;
+    font-size: .78rem; font-weight: 600; text-decoration: none;
+    transition: all .2s;
+  }
+  .fp-link-dev { background: #f0f0f5; color: #333; }
+  .fp-link-dev:hover { background: #e4e4ea; }
+  .fp-link-xhs { background: #fff0f3; color: #fe2c55; }
+  .fp-link-xhs:hover { background: #ffe0e6; }
+  .fp-link-fire { background: #fff5eb; color: #e67e22; }
+  .fp-link-fire:hover { background: #ffecda; }
+
+  .fab-top-right { position: fixed; top: 18px; right: 18px; bottom: auto; }
+  .fab-popup-top-right {
+    position: fixed; top: 70px; right: 18px; bottom: auto;
+  }
+
   @media (max-width: 480px) {
     .legend { grid-template-columns: 1fr; }
     .bt-map { grid-template-columns: 1fr; }
     .game-title h1 { font-size: 1.5rem; }
     #archetype-grid { grid-template-columns: 1fr !important; }
+    .share-actions { flex-direction: column; }
   }
 </style>
 </head>
@@ -666,7 +774,30 @@
      SCREEN 6: ENDING
 ═══════════════════════════════════════════ -->
 <div class="screen" id="s-ending">
-  <div id="ending-content"></div>
+  <!-- 可截图的分享卡片 -->
+  <div id="share-card">
+    <div class="share-card-title">她的职业命运图鉴 · 三力觉醒</div>
+    <div id="ending-content"></div>
+    <div class="share-card-stats" id="ending-share-stats"></div>
+    <div id="ending-share-diagnosis"></div>
+    <div class="share-card-quote" id="ending-share-quote"></div>
+    <div class="share-card-footer">扫码或搜索「她的职业命运图鉴」测测你的三力 · Femai 共学营出品</div>
+  </div>
+
+  <!-- 分享操作按钮 -->
+  <div class="share-actions">
+    <button class="share-btn btn-download" onclick="downloadCard()">
+      <span class="share-icon">📥</span> 保存图片
+    </button>
+    <button class="share-btn btn-x" onclick="shareToX()">
+      <span class="share-icon">𝕏</span> 分享到 X
+    </button>
+    <button class="share-btn btn-xhs" onclick="shareToXHS()">
+      <span class="share-icon">📕</span> 分享到小红书
+    </button>
+  </div>
+
+  <!-- 详细诊断（不截图） -->
   <div class="card">
     <h2>📌 你的三力诊断报告</h2>
     <div id="ending-stats" class="stats-panel" style="position:static;margin-top:12px;"></div>
@@ -681,6 +812,31 @@
   <button class="btn secondary" onclick="goTo('s-start')" style="margin-top:8px;">← 返回总图</button>
 </div>
 
+<!-- Toast 提示 -->
+<div class="toast" id="toast"></div>
+
+</div>
+
+<!-- ═══ 浮窗 ═══ -->
+<div class="fab fab-left" onclick="togglePopup('dev')">🧊</div>
+<div class="fab-popup fab-popup-left" id="popup-dev">
+  <div class="fp-name">🧊 ForOneIce</div>
+  <div class="fp-role">开发者 · Builder</div>
+  <a class="fp-link fp-link-dev" href="https://github.com/ForOneIce" target="_blank" rel="noopener">→ GitHub 主页</a>
+</div>
+
+<div class="fab fab-right" onclick="togglePopup('fish')">🐟</div>
+<div class="fab-popup fab-popup-right" id="popup-fish">
+  <div class="fp-name">🐟 鱼仔</div>
+  <div class="fp-role">三力模型主讲人 · Femai 共学营</div>
+  <a class="fp-link fp-link-xhs" href="https://www.xiaohongshu.com/user/profile/617a947d000000000201938e" target="_blank" rel="noopener">→ 小红书主页</a>
+</div>
+
+<div class="fab fab-top-right" onclick="togglePopup('femai')">🔥</div>
+<div class="fab-popup fab-popup-top-right" id="popup-femai">
+  <div class="fp-name">🔥 Herstory FemAI</div>
+  <div class="fp-role">全女 AI 共学社区 · 1000+ 姐妹一起成长</div>
+  <a class="fp-link fp-link-fire" href="https://www.xiaohongshu.com/user/profile/68f85841000000003700a97d" target="_blank" rel="noopener">→ 小红书主页</a>
 </div>
 
 <script>
@@ -1155,6 +1311,9 @@ function showEnding(){
   else if(H>=7&&P>=5) key='manager';
 
   const e=ENDINGS[key];
+  state._endingKey = key;
+  state._endingTitle = e.title;
+  state._endingIcon = e.icon;
 
   document.getElementById('ending-content').innerHTML=`
     <div class="ending-card" style="background:${e.grad};border-color:${e.border}">
@@ -1165,6 +1324,33 @@ function showEnding(){
       </div>
       <p class="ending-sub">${e.sub}</p>
     </div>`;
+
+  document.getElementById('ending-share-stats').innerHTML=`
+    <div class="share-stat">
+      <div class="ss-val" style="color:var(--pro)">${P}</div>
+      <div class="ss-label">🔧 专业力</div>
+    </div>
+    <div class="share-stat">
+      <div class="ss-val" style="color:var(--hard)">${H}</div>
+      <div class="ss-label">⚡ 硬通货力</div>
+    </div>
+    <div class="share-stat">
+      <div class="ss-val" style="color:var(--soul)">${N}</div>
+      <div class="ss-label">🌸 本性力</div>
+    </div>`;
+
+  const shortDiag = [];
+  if(P<=5) shortDiag.push('🔧 专业力待加强');
+  if(H<=5) shortDiag.push('⚡ 硬通货力待提升');
+  if(N<=5) shortDiag.push('🌸 本性力待激活');
+  if(!shortDiag.length) shortDiag.push('✅ 三力状态良好，寻找交叉整合点');
+  document.getElementById('ending-share-diagnosis').innerHTML=`
+    <div style="text-align:center;font-size:.8rem;color:var(--muted);margin:8px 0;">
+      ${shortDiag.join('　·　')}
+    </div>`;
+
+  document.getElementById('ending-share-quote').innerHTML=
+    '「你不需要选择对的路，因为你走的每一条路都是对的。」';
 
   renderStats('ending-stats','最终三力评估');
 
@@ -1202,6 +1388,85 @@ function restart(){
   document.querySelectorAll('#archetype-grid .choice-btn').forEach(b=>b.classList.remove('selected'));
   goTo('s-assess');
 }
+
+// ════════════════ SHARE ════════════════
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function getShareText(){
+  return `${state._endingIcon} 我在「她的职业命运图鉴」中获得了【${state._endingTitle}】结局！\n\n` +
+    `🔧 专业力 ${state.P} · ⚡ 硬通货力 ${state.H} · 🌸 本性力 ${state.N}\n\n` +
+    `「你不需要选择对的路，因为你走的每一条路都是对的。」\n\n` +
+    `#她的职业命运图鉴 #三力觉醒 #女性职场 #Femai共学营`;
+}
+
+function downloadCard(){
+  const card=document.getElementById('share-card');
+  showToast('正在生成图片…');
+  html2canvas(card, {
+    scale: 2,
+    backgroundColor: '#fffaf8',
+    useCORS: true,
+    logging: false
+  }).then(canvas=>{
+    const link=document.createElement('a');
+    link.download=`职业命运图鉴-${state._endingTitle}.png`;
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+    showToast('图片已保存 ✓');
+  }).catch(()=>{
+    showToast('生成失败，请截图保存');
+  });
+}
+
+function shareToX(){
+  const text=getShareText();
+  const url='https://x.com/intent/tweet?text='+encodeURIComponent(text);
+  window.open(url,'_blank','width=600,height=400');
+}
+
+function shareToXHS(){
+  const text=getShareText();
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>{
+      showToast('文案已复制，打开小红书粘贴发布 ✓');
+    }).catch(()=>{
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text){
+  const ta=document.createElement('textarea');
+  ta.value=text; ta.style.position='fixed'; ta.style.left='-9999px';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); showToast('文案已复制，打开小红书粘贴发布 ✓'); }
+  catch(e){ showToast('复制失败，请长按手动复制'); }
+  document.body.removeChild(ta);
+}
+
+// ════════════════ FAB POPUPS ════════════════
+let openPopup=null;
+function togglePopup(id){
+  const el=document.getElementById('popup-'+id);
+  if(openPopup && openPopup!==el){
+    openPopup.classList.remove('show');
+  }
+  el.classList.toggle('show');
+  openPopup=el.classList.contains('show')?el:null;
+}
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.fab')&&!e.target.closest('.fab-popup')&&openPopup){
+    openPopup.classList.remove('show');
+    openPopup=null;
+  }
+});
 </script>
 </body>
 </html>
