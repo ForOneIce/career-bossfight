@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>她的职业命运图鉴 · 三力觉醒</title>
+<style>
+  :root {
+    --pro: #00c6ff;
+    --hard: #f7971e;
+    --soul: #c084fc;
+    --bg: #0d0d1a;
+    --card: #1a1a2e;
+    --border: #2a2a4a;
+    --text: #e8e8f0;
+    --muted: #888aaa;
+    --danger: #ff4757;
+    --success: #2ed573;
+    --warn: #ffa502;
+    --rose: #fb7185;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  #app { max-width: 760px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  /* ── HEADER ── */
+  .game-title {
+    text-align: center;
+    padding: 36px 0 24px;
+  }
+  .game-title h1 {
+    font-size: 2rem; font-weight: 900; letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--pro), var(--soul), var(--rose));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .game-title p { color: var(--muted); margin-top: 8px; font-size: .95rem; }
+  .game-title .sub2 {
+    margin-top: 6px; font-size: .82rem; color: #c084fc99;
+    font-style: italic;
+  }
+
+  /* ── SCREEN ── */
+  .screen { display: none; animation: fadeIn .4s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ── ABILITY LEGEND ── */
+  .legend {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 24px;
+  }
+  .legend-item {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 12px; text-align: center;
+  }
+  .legend-item .icon { font-size: 1.8rem; }
+  .legend-item .label { font-weight: 700; font-size: .95rem; margin: 6px 0 4px; }
+  .legend-item .desc { color: var(--muted); font-size: .78rem; line-height: 1.5; }
+  .pro .label { color: var(--pro); }
+  .hard .label { color: var(--hard); }
+  .soul .label { color: var(--soul); }
+
+  /* ── STATS BAR ── */
+  .stats-panel {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 16px; margin-bottom: 20px;
+    position: sticky; top: 10px; z-index: 10;
+  }
+  .stats-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .stats-row:last-child { margin-bottom: 0; }
+  .stats-label { width: 72px; font-size: .82rem; font-weight: 600; flex-shrink: 0; }
+  .bar-track {
+    flex: 1; height: 10px; background: #222240; border-radius: 99px; overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%; border-radius: 99px; transition: width .6s cubic-bezier(.4,0,.2,1);
+  }
+  .bar-fill.pro { background: linear-gradient(90deg, #005c97, var(--pro)); }
+  .bar-fill.hard { background: linear-gradient(90deg, #c25a0a, var(--hard)); }
+  .bar-fill.soul { background: linear-gradient(90deg, #7c3aed, var(--soul)); }
+  .stats-val { width: 28px; text-align: right; font-size: .85rem; font-weight: 700; }
+  .stage-label {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: .8rem; color: var(--muted); margin-bottom: 10px;
+  }
+  .stage-badge {
+    background: linear-gradient(135deg, #1a1a3e, #2a2a5e);
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 3px 10px; font-size: .78rem; color: var(--soul);
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 22px; margin-bottom: 16px;
+  }
+  .card h2 { font-size: 1.2rem; margin-bottom: 10px; }
+  .card p { color: var(--muted); line-height: 1.8; font-size: .92rem; }
+
+  /* ── CHAPTER TITLE ── */
+  .chapter-banner {
+    text-align: center; margin: 24px 0 18px;
+  }
+  .chapter-banner .year { color: var(--muted); font-size: .82rem; letter-spacing: 1px; }
+  .chapter-banner h2 { font-size: 1.5rem; font-weight: 900; margin: 6px 0 4px; }
+  .chapter-banner .sub { color: var(--muted); font-size: .88rem; }
+
+  /* ── BOTTLENECK ALERT ── */
+  .bottleneck {
+    border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;
+    border-left: 4px solid var(--danger); background: rgba(255,71,87,.08);
+  }
+  .bottleneck .bt-title { color: var(--danger); font-weight: 700; font-size: .95rem; margin-bottom: 6px; }
+  .bottleneck p { color: #ffb3bb; font-size: .87rem; line-height: 1.7; }
+  .unlock {
+    border-left-color: var(--success); background: rgba(46,213,115,.08);
+  }
+  .unlock .bt-title { color: var(--success); }
+  .unlock p { color: #b3ffd4; }
+  .info-box {
+    border-left-color: var(--soul); background: rgba(192,132,252,.08);
+  }
+  .info-box .bt-title { color: var(--soul); }
+  .info-box p { color: #e4ccff; }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .choice-btn {
+    background: #1e1e3a; border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 14px 18px; cursor: pointer;
+    text-align: left; transition: all .2s; color: var(--text);
+    font-size: .92rem; line-height: 1.6;
+  }
+  .choice-btn:hover { border-color: var(--soul); background: #22224a; transform: translateX(4px); }
+  .choice-btn .choice-tag {
+    font-size: .75rem; padding: 2px 8px; border-radius: 20px;
+    margin-bottom: 5px; display: inline-block; font-weight: 600;
+  }
+  .tag-pro { background: rgba(0,198,255,.15); color: var(--pro); }
+  .tag-hard { background: rgba(247,151,30,.15); color: var(--hard); }
+  .tag-soul { background: rgba(192,132,252,.15); color: var(--soul); }
+  .tag-neutral { background: rgba(255,255,255,.08); color: var(--muted); }
+  .choice-effect { font-size: .78rem; color: var(--muted); margin-top: 6px; }
+  .effect-pos { color: var(--success); }
+  .effect-neg { color: var(--danger); }
+
+  /* ── SELF-CHECK ── */
+  .slider-group { margin-bottom: 14px; }
+  .slider-group label {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: .88rem; margin-bottom: 6px;
+  }
+  .slider-group label span:first-child { font-weight: 600; }
+  .slider-group input[type=range] { width: 100%; accent-color: var(--pro); cursor: pointer; }
+  .slider-group.hard-s input { accent-color: var(--hard); }
+  .slider-group.soul-s input { accent-color: var(--soul); }
+  .slider-hint { color: var(--muted); font-size: .75rem; margin-top: 3px; }
+
+  /* ── ENDING ── */
+  .ending-card {
+    text-align: center; padding: 36px 24px;
+    border-radius: 20px; margin-bottom: 24px;
+    background: linear-gradient(135deg, #1a1a2e, #2a1a3e);
+    border: 1px solid var(--border);
+  }
+  .ending-icon { font-size: 4rem; margin-bottom: 16px; }
+  .ending-card h2 { font-size: 1.6rem; font-weight: 900; margin-bottom: 10px; }
+  .ending-card .ending-sub {
+    font-size: .95rem; color: var(--muted); line-height: 1.8;
+    max-width: 480px; margin: 0 auto 20px;
+  }
+  .ending-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+  .ending-tag {
+    padding: 4px 14px; border-radius: 20px; font-size: .82rem; font-weight: 600; border: 1px solid;
+  }
+  .diagnosis {
+    background: rgba(255,255,255,.04); border-radius: 12px;
+    padding: 16px; text-align: left; margin-bottom: 16px;
+  }
+  .diagnosis h4 { font-size: .9rem; color: var(--muted); margin-bottom: 10px; }
+  .diagnosis-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: .88rem; line-height: 1.6; margin-bottom: 8px;
+  }
+  .diagnosis-item .di-icon { flex-shrink: 0; margin-top: 2px; }
+
+  /* ── BOTTLENECK MAP ── */
+  .bt-map {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;
+  }
+  .bt-cell {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px;
+  }
+  .bt-cell .bt-combo { font-size: .78rem; color: var(--muted); margin-bottom: 5px; }
+  .bt-cell .bt-name { font-weight: 700; font-size: .9rem; margin-bottom: 5px; }
+  .bt-cell .bt-desc { font-size: .8rem; color: var(--muted); line-height: 1.5; }
+
+  /* ── BTN ── */
+  .btn {
+    display: inline-block; padding: 13px 28px; border-radius: 12px;
+    font-size: .95rem; font-weight: 700; cursor: pointer; border: none;
+    background: linear-gradient(135deg, #5b21b6, #c084fc);
+    color: #fff; transition: all .2s; letter-spacing: .5px;
+    width: 100%; text-align: center; margin-top: 8px;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(192,132,252,.35); }
+  .btn.secondary {
+    background: transparent; border: 1.5px solid var(--border); color: var(--muted);
+  }
+  .btn.secondary:hover { border-color: var(--soul); color: var(--text); box-shadow: none; }
+
+  /* ── PROGRESS ── */
+  .progress-track {
+    display: flex; gap: 0; margin-bottom: 24px; border-radius: 8px; overflow: hidden;
+  }
+  .progress-step { flex: 1; height: 4px; background: var(--border); transition: background .4s; }
+  .progress-step.done { background: var(--pro); }
+  .progress-step.current { background: var(--soul); }
+
+  /* ── TABLE ── */
+  .ref-table { width: 100%; border-collapse: collapse; font-size: .82rem; margin: 12px 0; }
+  .ref-table th {
+    background: rgba(255,255,255,.06); padding: 8px 10px; text-align: left;
+    color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--border);
+  }
+  .ref-table td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,.04); line-height: 1.5; }
+  .ref-table tr:last-child td { border-bottom: none; }
+
+  /* ── CASE CARD ── */
+  .case-card {
+    display: flex; gap: 12px; align-items: flex-start;
+    margin-bottom: 12px; padding: 14px;
+    background: rgba(192,132,252,.06);
+    border: 1px solid rgba(192,132,252,.15);
+    border-radius: 12px;
+  }
+  .case-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #5b21b6, #c084fc);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+  }
+  .case-name { font-weight: 700; font-size: .9rem; margin-bottom: 3px; color: var(--text); }
+  .case-role { font-size: .75rem; color: var(--soul); margin-bottom: 5px; }
+  .case-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── FEMALE EXTRA NOTE ── */
+  .female-note {
+    border-radius: 10px; padding: 12px 14px; margin-bottom: 14px;
+    background: rgba(251,113,133,.06); border-left: 3px solid var(--rose);
+    font-size: .82rem; color: #fca5a5; line-height: 1.7;
+  }
+  .female-note strong { color: var(--rose); }
+
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+  .inline-badge {
+    display: inline-block; padding: 1px 7px; border-radius: 10px;
+    font-size: .75rem; font-weight: 600; vertical-align: middle; margin: 0 2px;
+  }
+  .ib-pro { background: rgba(0,198,255,.15); color: var(--pro); }
+  .ib-hard { background: rgba(247,151,30,.15); color: var(--hard); }
+  .ib-soul { background: rgba(192,132,252,.15); color: var(--soul); }
+
+  /* ── WARM TIP ── */
+  .warm-tip {
+    position: relative;
+    border-radius: 14px; padding: 18px 20px 18px 48px;
+    margin: 16px 0;
+    background: linear-gradient(135deg, rgba(255,214,153,.06), rgba(255,182,108,.03));
+    border: 1px solid rgba(255,182,108,.18);
+  }
+  .warm-tip::before {
+    content: '🕯️'; position: absolute; left: 16px; top: 17px; font-size: 1.2rem;
+  }
+  .warm-tip .tip-label {
+    font-size: .72rem; color: rgba(255,200,120,.6); letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .warm-tip .tip-quote {
+    font-size: .92rem; color: #ffd9a0; line-height: 1.8;
+    font-style: italic; font-weight: 500;
+  }
+  .warm-tip .tip-src {
+    font-size: .72rem; color: rgba(255,200,120,.4); margin-top: 8px; text-align: right;
+  }
+
+  @media (max-width: 480px) {
+    .legend { grid-template-columns: 1fr; }
+    .bt-map { grid-template-columns: 1fr; }
+    .game-title h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 0: START
+═══════════════════════════════════════════ -->
+<div class="screen active" id="s-start">
+  <div class="game-title">
+    <h1>她的职业命运图鉴</h1>
+    <p>· 三力觉醒 · 你的下一个卡点在哪里？</p>
+    <div class="sub2">专为女性职场人设计 · 对照自己的真实处境</div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item pro">
+      <div class="icon">🔧</div>
+      <div class="label">专业力 P</div>
+      <div class="desc">岗位特定的技能、知识、经验积累</div>
+    </div>
+    <div class="legend-item hard">
+      <div class="icon">⚡</div>
+      <div class="label">硬通货力 H</div>
+      <div class="desc">执行力·逻辑·目标管理·影响力·沟通</div>
+    </div>
+    <div class="legend-item soul">
+      <div class="icon">🌸</div>
+      <div class="label">本性力 N</div>
+      <div class="desc">天赋偏好·内在动力·真实志趣契合度</div>
+    </div>
+  </div>
+
+  <div class="female-note">
+    <strong>女性职场特别提示：</strong>社会期待与自我期待的双重压力，常常让女性把"别人认为对的路"走成了自己的路——这正是本性力流失的主要来源。这个游戏帮你把三层能力看清楚。
+  </div>
+
+  <div class="card">
+    <h2>⚠️ 经典卡点全景</h2>
+    <div class="bt-map" style="margin-top:12px;">
+      <div class="bt-cell">
+        <div class="bt-combo">P高 · H低</div>
+        <div class="bt-name" style="color:var(--danger)">🧱 技术天花板</div>
+        <div class="bt-desc">做得好却升不上去，"能干的好人"一直是执行层，被"不会来事"卡死晋升</div>
+      </div>
+      <div class="bt-cell">
+        <div class="bt-combo">H高 · P低</div>
+        <div class="bt-name" style="color:var(--warn)">🫙 空心管理者</div>
+        <div class="bt-desc">能协调但没实货，遇到硬仗容易穿帮，职位虚高、团队不服</div>
+      </div>
+      <div class="bt-cell">
+        <div class="bt-combo">P高 · H高 · N错位</div>
+        <div class="bt-name" style="color:var(--soul)">💀 高薪内耗者</div>
+        <div class="bt-desc">表面成功，内心空洞，35岁后能量枯竭，越成功越迷茫，频繁失眠</div>
+      </div>
+      <div class="bt-cell">
+        <div class="bt-combo">N强 · P低 · H低</div>
+        <div class="bt-name" style="color:var(--muted)">🌬️ 空想怀才者</div>
+        <div class="bt-desc">有感觉没交付，满腔热情落不了地，被市场反复淘汰，怀才不遇感强烈</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🗺️ 各阶段核心任务</h2>
+    <table class="ref-table">
+      <thead>
+        <tr><th>阶段</th><th>年限</th><th>首要任务</th><th>女性常见卡点</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>立足期</td><td>0–2年</td>
+          <td><span class="inline-badge ib-pro">P↑↑</span> 先打专业基本盘</td>
+          <td>过度谦逊→被低估</td>
+        </tr>
+        <tr>
+          <td>成长期</td><td>2–5年</td>
+          <td><span class="inline-badge ib-hard">H↑</span> 升级执行与影响力</td>
+          <td>H不够→晋升卡墙，被男同事"抢"资源</td>
+        </tr>
+        <tr>
+          <td>瓶颈期</td><td>5–8年</td>
+          <td><span class="inline-badge ib-soul">N↑</span> 激活真实方向感</td>
+          <td>N错位→生育/职场两难，中年危机</td>
+        </tr>
+        <tr>
+          <td>突破期</td><td>8–15年</td>
+          <td>三力整合，构建壁垒</td>
+          <td>P+H强但N虚→职业空洞</td>
+        </tr>
+        <tr>
+          <td>成熟期</td><td>15年+</td>
+          <td><span class="inline-badge ib-soul">N</span>驱动，以势赋能</td>
+          <td>无N根基→被后浪拍倒</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <button class="btn" onclick="goTo('s-assess')">▶ 开始你的职业冒险</button>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 1: SELF-ASSESS
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-assess">
+  <div class="chapter-banner">
+    <div class="year">CHARACTER SETUP</div>
+    <h2>📋 自我校准</h2>
+    <div class="sub">评估你当前三力的初始值（1=弱 · 5=强）</div>
+  </div>
+
+  <div class="card">
+    <div class="slider-group">
+      <label>
+        <span>🔧 专业力 P</span>
+        <span id="pv-label" style="color:var(--pro);font-weight:700;">3</span>
+      </label>
+      <input type="range" min="1" max="5" value="3" id="pv"
+             oninput="document.getElementById('pv-label').textContent=this.value">
+      <div class="slider-hint">我在本岗位的技术/知识在同行中的水平</div>
+    </div>
+    <div class="slider-group hard-s">
+      <label>
+        <span>⚡ 硬通货力 H</span>
+        <span id="hv-label" style="color:var(--hard);font-weight:700;">3</span>
+      </label>
+      <input type="range" min="1" max="5" value="3" id="hv"
+             oninput="document.getElementById('hv-label').textContent=this.value">
+      <div class="slider-hint">我的执行力、逻辑沟通、目标感、向上影响力</div>
+    </div>
+    <div class="slider-group soul-s">
+      <label>
+        <span>🌸 本性力 N</span>
+        <span id="nv-label" style="color:var(--soul);font-weight:700;">3</span>
+      </label>
+      <input type="range" min="1" max="5" value="3" id="nv"
+             oninput="document.getElementById('nv-label').textContent=this.value">
+      <div class="slider-hint">我的工作与天赋/热情/本心的契合程度</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3 style="margin-bottom:12px;font-size:.95rem;">🌺 选择你的职业原型</h3>
+    <div id="archetype-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div class="choice-btn" onclick="pickArchetype(this,'tech')" data-arch="tech">
+        <span class="choice-tag tag-pro">专业路线</span><br>
+        💻 技术/研究型<br>
+        <span class="choice-effect">偏深度专业积累</span>
+      </div>
+      <div class="choice-btn" onclick="pickArchetype(this,'mgr')" data-arch="mgr">
+        <span class="choice-tag tag-hard">管理路线</span><br>
+        📊 运营/管理型<br>
+        <span class="choice-effect">偏组织协调能力</span>
+      </div>
+      <div class="choice-btn" onclick="pickArchetype(this,'create')" data-arch="create">
+        <span class="choice-tag tag-soul">创意路线</span><br>
+        🎨 创意/内容型<br>
+        <span class="choice-effect">偏本性表达驱动</span>
+      </div>
+      <div class="choice-btn" onclick="pickArchetype(this,'biz')" data-arch="biz">
+        <span class="choice-tag tag-neutral">商业路线</span><br>
+        🏪 商务/BD型<br>
+        <span class="choice-effect">三力全面挑战</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn" onclick="startGame()">确认出发 →</button>
+  <button class="btn secondary" onclick="goTo('s-start')" style="margin-top:8px;">← 返回</button>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 2: CHAPTER 1
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-ch1">
+  <div class="progress-track">
+    <div class="progress-step done"></div>
+    <div class="progress-step current"></div>
+    <div class="progress-step"></div>
+    <div class="progress-step"></div>
+    <div class="progress-step"></div>
+  </div>
+  <div id="stats-ch1" class="stats-panel"></div>
+  <div class="chapter-banner">
+    <div class="year">YEAR 0 – 2 · 第一章</div>
+    <h2>🌱 立足期：生存第一</h2>
+    <div class="sub">刚入职，一切从零开始，怎么站稳脚跟是唯一命题</div>
+  </div>
+  <div class="card"><p id="ch1-story"></p></div>
+  <div id="ch1-alert"></div>
+  <div id="ch1-tip"></div>
+  <div class="choices" id="ch1-choices"></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 3: CHAPTER 2
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-ch2">
+  <div class="progress-track">
+    <div class="progress-step done"></div>
+    <div class="progress-step done"></div>
+    <div class="progress-step current"></div>
+    <div class="progress-step"></div>
+    <div class="progress-step"></div>
+  </div>
+  <div id="stats-ch2" class="stats-panel"></div>
+  <div class="chapter-banner">
+    <div class="year">YEAR 2 – 5 · 第二章</div>
+    <h2>📈 成长期：晋升争夺</h2>
+    <div class="sub">站稳了脚跟，天花板开始悄悄压下来</div>
+  </div>
+  <div class="card"><p id="ch2-story"></p></div>
+  <div id="ch2-alert"></div>
+  <div class="choices" id="ch2-choices"></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 4: CHAPTER 3
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-ch3">
+  <div class="progress-track">
+    <div class="progress-step done"></div>
+    <div class="progress-step done"></div>
+    <div class="progress-step done"></div>
+    <div class="progress-step current"></div>
+    <div class="progress-step"></div>
+  </div>
+  <div id="stats-ch3" class="stats-panel"></div>
+  <div class="chapter-banner">
+    <div class="year">YEAR 5 – 8 · 第三章</div>
+    <h2>🧱 瓶颈期：命运岔路</h2>
+    <div class="sub">有了资历，内外压力同时袭来，是最考验本性的时刻</div>
+  </div>
+  <div class="card"><p id="ch3-story"></p></div>
+  <div id="ch3-alert"></div>
+  <div class="choices" id="ch3-choices"></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 5: CHAPTER 4
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-ch4">
+  <div class="progress-track">
+    <div class="progress-step done"></div>
+    <div class="progress-step done"></div>
+    <div class="progress-step done"></div>
+    <div class="progress-step done"></div>
+    <div class="progress-step current"></div>
+  </div>
+  <div id="stats-ch4" class="stats-panel"></div>
+  <div class="chapter-banner">
+    <div class="year">YEAR 8 – 15 · 第四章</div>
+    <h2>🚀 突破期：构建壁垒</h2>
+    <div class="sub">你开始真正看清自己的筹码，以及真正在意的东西</div>
+  </div>
+  <div class="card"><p id="ch4-story"></p></div>
+  <div id="ch4-alert"></div>
+  <div class="choices" id="ch4-choices"></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 6: ENDING
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-ending">
+  <div id="ending-content"></div>
+  <div class="card">
+    <h2>📌 你的三力诊断报告</h2>
+    <div id="ending-stats" class="stats-panel" style="position:static;margin-top:12px;"></div>
+    <div id="ending-diagnosis" class="diagnosis" style="margin-top:12px;"></div>
+  </div>
+  <div class="card">
+    <h2>👩 参照她们的故事</h2>
+    <div id="ending-cases"></div>
+  </div>
+  <button class="btn" onclick="restart()">🔄 重新开始 / 换条路走走</button>
+  <button class="btn secondary" onclick="goTo('s-start')" style="margin-top:8px;">← 返回总图</button>
+</div>
+
+</div>
+
+<script>
+// ════════════════ STATE ════════════════
+const state = { P:3, H:3, N:3, arch:'tech', choices:[] };
+
+// ════════════════ UTILS ════════════════
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+function applyDelta(p,h,n){
+  state.P=clamp(state.P+p,1,10);
+  state.H=clamp(state.H+h,1,10);
+  state.N=clamp(state.N+n,1,10);
+}
+function renderStats(id, label){
+  const c=document.getElementById(id); if(!c)return;
+  c.innerHTML=`
+    <div class="stage-label">
+      <span>三力仪表</span>
+      <span class="stage-badge">${label}</span>
+    </div>
+    <div class="stats-row">
+      <span class="stats-label" style="color:var(--pro)">🔧 专业力</span>
+      <div class="bar-track"><div class="bar-fill pro" style="width:${state.P*10}%"></div></div>
+      <span class="stats-val" style="color:var(--pro)">${state.P}</span>
+    </div>
+    <div class="stats-row">
+      <span class="stats-label" style="color:var(--hard)">⚡ 硬通货</span>
+      <div class="bar-track"><div class="bar-fill hard" style="width:${state.H*10}%"></div></div>
+      <span class="stats-val" style="color:var(--hard)">${state.H}</span>
+    </div>
+    <div class="stats-row">
+      <span class="stats-label" style="color:var(--soul)">🌸 本性力</span>
+      <div class="bar-track"><div class="bar-fill soul" style="width:${state.N*10}%"></div></div>
+      <span class="stats-val" style="color:var(--soul)">${state.N}</span>
+    </div>`;
+}
+function makeAlert(type,title,body){
+  const cls = type==='danger'?'bottleneck': type==='info'?'bottleneck info-box':'bottleneck unlock';
+  return `<div class="${cls}"><div class="bt-title">${title}</div><p>${body}</p></div>`;
+}
+
+// ════════════════ SETUP ════════════════
+let selectedArch=null;
+function pickArchetype(el,arch){
+  document.querySelectorAll('#archetype-grid .choice-btn').forEach(b=>b.style.borderColor='');
+  el.style.borderColor='var(--soul)';
+  selectedArch=arch;
+}
+function startGame(){
+  state.P=parseInt(document.getElementById('pv').value)*2;
+  state.H=parseInt(document.getElementById('hv').value)*2;
+  state.N=parseInt(document.getElementById('nv').value)*2;
+  state.arch=selectedArch||'tech';
+  state.choices=[];
+  loadChapter1(); goTo('s-ch1');
+}
+
+// ════════════════ CHAPTER 1 ════════════════
+function loadChapter1(){
+  renderStats('stats-ch1','第一章·立足期');
+  const stories={
+    tech:`你入职了一家互联网公司做产品/研发。第一次组会，你鼓起勇气提了个想法，男同事抢先一步几乎说了同样的话，掌声却是他的。你愣了一下，然后告诉自己：先用实力说话。同期入职的小陈每天钻研技术，而同组的小玲已经开始主动帮各部门解决问题、混脸熟……`,
+    mgr:`你加入一家品牌公司做运营助理。老板把一堆数据报告甩给你，说"你来分析下"。你发现隔壁组的同事天天主动揽活、跑各部门协调，而你还在搞清楚自己的职责边界。你感到一种隐约的焦虑……`,
+    create:`你进入一家内容公司做策划。你满脑子都是创意，但Leader说第一件事是先把100篇竞品逐字拆解。你有点憋屈，但同期入职的小柔已经交出了第一份完整的竞品报告……`,
+    biz:`你做商务BD，第一个月颗粒无收。前辈说"先把产品背烂再出去谈"，但你看到另一个同事凭着会聊天已经签了两单。你开始怀疑自己的路子……`
+  };
+  document.getElementById('ch1-story').innerHTML = stories[state.arch]||stories.tech;
+
+  document.getElementById('ch1-alert').innerHTML = state.P<=4
+    ? makeAlert('danger','⚠️ 卡点预警：专业根基不稳',`专业力偏弱（当前${state.P}分）。立足期最大风险：基本交付出问题，女性在职场中本就需要更多"实力证明"，专业不过关会被快速贴标签、边缘化，试用期淘汰风险高。`)
+    : makeAlert('unlock','✅ 专业基础扎实',`专业力（${state.P}分）还不错。立足期除了持续夯实专业，可以开始有意识地练习"让专业被看见"——这是女性职场中常被忽视的硬通货。`);
+
+  document.getElementById('ch1-choices').innerHTML=`
+    <div class="choice-btn" onclick="ch1Choice('A')">
+      <span class="choice-tag tag-pro">专业优先</span>
+      <strong>「专注钻研，成为团队里最懂业务的人，用实力建立话语权」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">🔧 专业力 +3</span>&nbsp;
+        <span class="effect-neg">⚡ 硬通货 -1（忽略了影响力建设）</span>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="ch1Choice('B')">
+      <span class="choice-tag tag-hard">硬通货优先</span>
+      <strong>「主动揽活，跨部门帮忙，建立信任网络，主动表达观点」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">⚡ 硬通货 +3</span>&nbsp;
+        <span class="effect-neg">🔧 专业力 +1（基础打得不够深）</span>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="ch1Choice('C')">
+      <span class="choice-tag tag-soul">本性探索</span>
+      <strong>「一边工作一边认真问自己：这条路我真的喜欢吗？」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">🌸 本性力 +2</span>&nbsp;
+        <span class="effect-neg">🔧+1 ⚡+1（早期分心代价真实存在）</span>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="ch1Choice('D')">
+      <span class="choice-tag tag-neutral">均衡投入</span>
+      <strong>「白天精进技能，晚上学方法论，保持对自我的持续感知」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">🔧+1 ⚡+1 🌸+1</span>&nbsp;
+        <span class="effect-neg">（稳健但各项进步较慢）</span>
+      </div>
+    </div>`;
+}
+function ch1Choice(c){
+  state.choices.push('ch1:'+c);
+  if(c==='A') applyDelta(3,-1,0);
+  else if(c==='B') applyDelta(1,3,0);
+  else if(c==='C') applyDelta(1,1,2);
+  else applyDelta(1,1,1);
+  loadChapter2(); goTo('s-ch2');
+}
+
+// ════════════════ CHAPTER 2 ════════════════
+function loadChapter2(){
+  renderStats('stats-ch2','第二章·成长期');
+  const stories={
+    tech:`三年了。你代码扎实，绩效稳定，组里有目共睹。但晋升述职时，Leader轻描淡写地说：「你专业没问题，但你的影响力在哪里？你推动过什么跨部门合作？你带过人吗？」你知道那道隐形的墙在哪里。`,
+    mgr:`你运营数据做得漂亮，复盘PPT越来越专业。但申请晋升主管时，职位给了一个"更会协调资源"的男同事，你的反馈是：「你执行很稳，但驱动力和格局还需要打磨。」`,
+    create:`你产出了多篇10w+内容，但老板说需要你「带团队扩产能」。你感到恐慌——从创作者到团队管理者，是完全不同的物种。`,
+    biz:`你业绩做到team前三，但大客户总监位置给了另一个同事，因为「他能带团队、懂管理」。业绩更好的你，输在了从未被系统训练过的管理能力上。`
+  };
+  document.getElementById('ch2-story').innerHTML=stories[state.arch]||stories.tech;
+
+  document.getElementById('ch2-alert').innerHTML = state.H<=4
+    ? makeAlert('danger','🧱 卡点触发：晋升玻璃天花板',`硬通货力不足（${state.H}分）。女性在职场晋升中面临双重标准：既要"够强"又要"够好相处"——这要求硬通货力更精准。执行力、影响力、目标管理，是穿透天花板的核心工具。`)
+    : state.P<=4
+    ? makeAlert('danger','⚠️ 空心风险预警',`专业力偏弱（${state.P}分）。小心成为"会说不会做"的空心管理者，下属和同行会质疑你的专业判断，遇到硬仗容易穿帮，女性在这一点上被放大审视的概率更高。`)
+    : makeAlert('unlock','💪 成长期状态良好',`专业和硬通货都有一定基础（P:${state.P} H:${state.H}），现在是构建「复合竞争力」的最佳窗口。`);
+
+  document.getElementById('ch2-choices').innerHTML=`
+    <div class="choice-btn" onclick="ch2Choice('A')">
+      <span class="choice-tag tag-hard">补硬通货</span>
+      <strong>「主动请缨跨部门项目，练习目标拆解、向上汇报与团队影响力」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">⚡ 硬通货 +3</span>&nbsp;
+        <span class="effect-neg">🔧 专业力 +0（深度暂时停止增长）</span>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="ch2Choice('B')">
+      <span class="choice-tag tag-pro">极致专业</span>
+      <strong>「成为行业内稀缺的专家，靠不可替代性重新定价自己」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">🔧 专业力 +3</span>&nbsp;
+        <span class="effect-neg">⚡ 硬通货 -1（依然单打独斗模式）</span>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="ch2Choice('C')">
+      <span class="choice-tag tag-soul">内省方向</span>
+      <strong>「认真问自己：我真的想继续在这个方向走下去吗？」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">🌸 本性力 +3</span>&nbsp;
+        <span class="effect-neg">🔧+0 ⚡+0（短期职场收益为零）</span>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="ch2Choice('D')">
+      <span class="choice-tag tag-hard">系统进修</span>
+      <strong>「副带一个小项目组，同时系统学习管理和结构化思维」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">⚡ 硬通货 +2 🌸 本性力 +1</span>&nbsp;
+        <span class="effect-neg">🔧 +0</span>
+      </div>
+    </div>`;
+}
+function ch2Choice(c){
+  state.choices.push('ch2:'+c);
+  if(c==='A') applyDelta(0,3,0);
+  else if(c==='B') applyDelta(3,-1,0);
+  else if(c==='C') applyDelta(0,0,3);
+  else applyDelta(0,2,1);
+  loadChapter3(); goTo('s-ch3');
+}
+
+// ════════════════ CHAPTER 3 ════════════════
+function loadChapter3(){
+  renderStats('stats-ch3','第三章·瓶颈期');
+  let story='';
+  if(state.P>=7&&state.H<=5)
+    story='你是公认的业务专家，但每一次晋升你都差那么一口气。同级里不如你专业的人，却在你前面拿到了总监头衔。你开始深夜刷帖子，一边是"35岁被裁员"的恐慌，一边是那个深藏心底的声音：「我本来可以更好的。」';
+  else if(state.H>=7&&state.P<=5)
+    story='你已经带着十几人的团队。但在一次关键的业务攻坚中，你发现自己说不出真正的干货，只能不停地开会、对齐、推进。一个更年轻、专业更硬的女生被空降到你旁边，你感受到了真实的威胁。';
+  else if(state.N<=4)
+    story='表面上一切都还行：职级上来了，薪资涨了，父母觉得你很有出息。但你已经很久没有在工作中感受到「活着」的感觉了。你靠薪资和title麻醉自己，眼神开始空洞。有时候凌晨三点醒来，你不知道自己在为谁而拼。';
+  else
+    story='五年了，你积累了专业深度、团队口碑和初步的方向感。就在这时，一场行业震动来了——你所在的赛道开始萎缩，身边的人纷纷离职或焦虑。你站在岔路口，第一次感受到「选择」的重量。';
+
+  document.getElementById('ch3-story').innerHTML=story;
+
+  document.getElementById('ch3-alert').innerHTML = state.N<=4
+    ? makeAlert('danger','💀 核心卡点：本性错位——高薪内耗',`本性力严重不足（${state.N}分）。你在用意志力硬撑。对女性来说，这个阶段往往还叠加婚育压力与外部期待，内耗被双重放大。5–8年是本性觉醒的关键窗口，错过将在35岁后全面能量崩塌。`)
+    : (state.P<=4&&state.H<=4)
+    ? makeAlert('danger','🌬️ 危险：两翼不振',`专业和硬通货同时偏弱，本性热情虽在，但无法变现。容易陷入"有热情没出路"的空转，随着年龄增长焦虑感会持续累积。`)
+    : makeAlert('info','🔑 瓶颈期关键提示',`此刻最重要的任务是：找到本性力与专业力的交叉点。"你最擅长的"和"你最热爱的"的重叠区域，才是真正属于你、别人无法复制的护城河。`);
+
+  document.getElementById('ch3-choices').innerHTML=`
+    <div class="choice-btn" onclick="ch3Choice('A')">
+      <span class="choice-tag tag-soul">顺应本性</span>
+      <strong>「暂离职场，用半年到一年时间系统探索真正热爱的方向，哪怕薪资归零」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">🌸 本性力 +4</span>&nbsp;
+        <span class="effect-neg">🔧 -1 ⚡ -1（代价真实，但可能是最值的投资）</span>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="ch3Choice('B')">
+      <span class="choice-tag tag-hard">跨越平台</span>
+      <strong>「跳到头部公司，用更大舞台加速专业与影响力的双向提升」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">🔧 专业力 +2 ⚡ 硬通货 +2</span>&nbsp;
+        <span class="effect-neg">🌸 本性力 +0（根本问题未解）</span>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="ch3Choice('C')">
+      <span class="choice-tag tag-pro">极致深耕</span>
+      <strong>「在当前赛道成为顶级专家，靠极致稀缺性重新定价自己」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">🔧 专业力 +4</span>&nbsp;
+        <span class="effect-neg">⚡ +0 🌸 +0（路更窄，护城河更深）</span>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="ch3Choice('D')">
+      <span class="choice-tag tag-soul">迁移转型</span>
+      <strong>「把积累的专业力迁移到本性更契合的新赛道，承担过渡期代价」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">🌸 本性力 +3 🔧 专业力 +1</span>&nbsp;
+        <span class="effect-neg">⚡ +0（过渡期需要勇气和现金储备）</span>
+      </div>
+    </div>`;
+}
+function ch3Choice(c){
+  state.choices.push('ch3:'+c);
+  if(c==='A') applyDelta(-1,-1,4);
+  else if(c==='B') applyDelta(2,2,0);
+  else if(c==='C') applyDelta(4,0,0);
+  else applyDelta(1,0,3);
+  loadChapter4(); goTo('s-ch4');
+}
+
+// ════════════════ CHAPTER 4 ════════════════
+function loadChapter4(){
+  renderStats('stats-ch4','第四章·突破期');
+  let story='';
+  if(state.N>=7)
+    story='你清楚地知道自己要什么了。每一个选择都有了"锚"——不再是为了满足别人的期待，而是真正属于自己的坐标。你发现能量不再是消耗品，而是在做对的事情时会自动再生。机会开始主动找上门。';
+  else if(state.P>=8)
+    story='十年修炼，你已是圈内公认的稀缺专家。猎头不断，邀约不停。但深夜你仍然会想：「这真的是我想要的人生吗？」那个声音从未真正消失过，只是被你压得越来越深。';
+  else if(state.H>=8)
+    story='你带着二十人的团队，业绩年年达标。但你发现自己越来越依赖职位权力而非专业判断——当团队里的年轻人问你具体的业务问题时，你开始给出越来越模糊的答案。「我的核心竞争力到底是什么？」这个问题越来越响。';
+  else
+    story='十年过去了。你积累了不少经历，但三块能力都停在中等水平，没有真正突出的壁垒。市场在变，年轻人在涌来，你感到了一种模糊却持续的焦虑。这是最后的战略窗口期。';
+
+  document.getElementById('ch4-story').innerHTML=story;
+  const total=state.P+state.H+state.N;
+  document.getElementById('ch4-alert').innerHTML = total>=22
+    ? makeAlert('unlock','🚀 三力整合临界点',`你已具备构建真正个人壁垒的条件（总分${total}）。此阶段不需要再单独加某一项，而是找到三力的交叉地带——那是你最独特也最难被替代的价值区间。`)
+    : state.N<=4
+    ? makeAlert('danger','⚠️ 最后警告：本性力严重缺失',`本性力仍只有${state.N}分。突破期之后若本性依然错位，职业成熟期将陷入彻底的空洞——高收入高地位，但完全丧失意义感，这种状态对女性的身心消耗尤为剧烈。`)
+    : makeAlert('info','📍 突破期核心命题',`你现在要思考的不是「如何更努力」，而是「如何把三力组合成只属于你的独特定位」——你的性别、你的视角、你的经历，都是组合中的独特变量。`);
+
+  document.getElementById('ch4-choices').innerHTML=`
+    <div class="choice-btn" onclick="ch4Choice('A')">
+      <span class="choice-tag tag-soul">创业/独立</span>
+      <strong>「以本性为核心，整合三力，做自己的产品/IP/公司」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">🌸+3 🔧+1 ⚡+2</span>&nbsp;
+        <span class="effect-neg">（N≥6才有成功基础，否则方向会持续漂移）</span>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="ch4Choice('B')">
+      <span class="choice-tag tag-pro">专家定位</span>
+      <strong>「做顾问/讲师/独立专家，把专业力直接货币化」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">🔧 专业力 +2 🌸 本性力 +2 ⚡+1</span>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="ch4Choice('C')">
+      <span class="choice-tag tag-hard">职业经理人</span>
+      <strong>「进头部公司做中高层，以硬通货力换平台资源与更大影响力」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">⚡ 硬通货 +3 🔧+1</span>&nbsp;
+        <span class="effect-neg">🌸 +0</span>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="ch4Choice('D')">
+      <span class="choice-tag tag-neutral">三力整合</span>
+      <strong>「沉淀两年，把三力凝练成一个独特的个人方法论/品牌/社群」</strong>
+      <div class="choice-effect">
+        <span class="effect-pos">🔧+2 ⚡+2 🌸+2</span>&nbsp;
+        <span class="effect-neg">（最慢，但结局最扎实）</span>
+      </div>
+    </div>`;
+}
+function ch4Choice(c){
+  state.choices.push('ch4:'+c);
+  if(c==='A'){ if(state.N>=6) applyDelta(1,2,3); else applyDelta(-1,-1,1); }
+  else if(c==='B') applyDelta(2,1,2);
+  else if(c==='C') applyDelta(1,3,0);
+  else applyDelta(2,2,2);
+  showEnding(); goTo('s-ending');
+}
+
+// ════════════════════════════════════════
+// ENDINGS  （全部参照案例均为女性）
+// ════════════════════════════════════════
+const ENDINGS = {
+
+  apex: {
+    icon:'🏆', title:'全栖达人',
+    grad:'linear-gradient(135deg,#0a2a0a,#1a4a1a)', border:'var(--success)',
+    tags:[{l:'三力通达',c:'var(--success)'},{l:'真实整合',c:'var(--soul)'}],
+    sub:'你完成了最难的事：让「你最擅长的」「你最热爱的」「市场最需要的」高度重合。这不是运气——是十年以上持续自我校准的结果，也是极少数人能做到的事。',
+    cases:[
+      {av:'👑',name:'董明珠',role:'格力电器董事长',desc:'从一线销售员起步，用极致专业力（空调技术/市场）× 强硬执行力 × 真实的产业使命感，三力整合打造出无可复制的个人壁垒。'},
+      {av:'🌙',name:'柳青',role:'滴滴出行前总裁',desc:'高盛投行专业背景 × 顶级目标管理能力 × 对出行变革的真实热情，三力在互联网战场完成整合，成为中国最具影响力的女性职业经理人之一。'}
+    ]
+  },
+
+  expert: {
+    icon:'🧠', title:'行业顶尖专家',
+    grad:'linear-gradient(135deg,#001a3a,#002a5a)', border:'var(--pro)',
+    tags:[{l:'专业极深',c:'var(--pro)'},{l:'影响力待放大',c:'var(--warn)'}],
+    sub:'你是业内真正懂行的人，专业深度是真实的护城河。但专业的边界也限制了你的杠杆——下一步是学会把专业力通过内容、演讲、社群放大成更广泛的影响力。',
+    cases:[
+      {av:'🔬',name:'颜宁',role:'结构生物学家·深圳医学科学院院长',desc:'二十年专注蛋白质结构研究，专业力登顶全球，但她同时通过公开写作、演讲持续放大影响力——专业力从不是终点，而是起点。'},
+      {av:'🌿',name:'屠呦呦',role:'诺贝尔医学奖得主',desc:'几十年如一日深耕青蒿素研究，专业力的极致积累最终改变了人类历史。她的故事证明：女性在专业赛道上的坚持，可以是最深的护城河。'}
+    ]
+  },
+
+  manager: {
+    icon:'🎙️', title:'组织力量者',
+    grad:'linear-gradient(135deg,#2a1500,#4a2800)', border:'var(--hard)',
+    tags:[{l:'组织能力强',c:'var(--hard)'},{l:'专业需守住底线',c:'var(--warn)'}],
+    sub:'你是团队的粘合剂与推进器，硬通货能力让你驾驭复杂组织。但管理者若无专业底气，攻坚时容易失去团队信任——务必保留一个"能打硬仗"的专业领域，这是你的底牌。',
+    cases:[
+      {av:'💼',name:'谢丽尔·桑德伯格',role:'Facebook前COO·《向前一步》作者',desc:'经济学专业底盘 × 卓越组织管理力 × 真实的女性职场使命，三力配合在科技巨头中成就了女性管理者的标杆形象。'},
+      {av:'🎯',name:'张蕾',role:'央视主持人·创业者',desc:'从主持专业深耕到跨界创业，凭借极强的沟通影响力与目标驱动力，在不同赛道完成了职业转型与组织建设。'}
+    ]
+  },
+
+  dreamer: {
+    icon:'🌬️', title:'空想怀才者',
+    grad:'linear-gradient(135deg,#1a1a2e,#2a2a4e)', border:'var(--muted)',
+    tags:[{l:'方向感强烈',c:'var(--soul)'},{l:'落地能力待建',c:'var(--danger)'}],
+    sub:'你清楚自己热爱什么，这极为珍贵。但热爱本身不能当饭吃——你需要用专业力把天赋变成技能，用硬通货力把技能变成可交付的价值。热情是引擎，能力是轮子，两者缺一不可。',
+    cases:[
+      {av:'🌺',name:'李子柒',role:'内容创作者',desc:'早期也历经多次摸索失败，本性热爱（田园美食）必须落地成极致的拍摄/剪辑专业力 + 运营影响力，缺任何一环都无法成立。热爱是起点，不是终点。'},
+      {av:'🏛️',name:'林徽因',role:'建筑师·诗人',desc:'文学天赋（本性力）与建筑专业（专业力）加上广泛的社交影响力（硬通货力）三力整合，才成就了她的传奇——单靠才华是不够的。'}
+    ]
+  },
+
+  burnout: {
+    icon:'💀', title:'高薪内耗者',
+    grad:'linear-gradient(135deg,#1a0520,#2a0a30)', border:'var(--soul)',
+    tags:[{l:'外部成功',c:'var(--hard)'},{l:'内在空洞',c:'var(--danger)'}],
+    sub:'你拿到了世俗意义上的大部分：职位、薪资、认可。但你知道那个「活着」的感觉越来越遥远。这不是矫情——是生命力的耗竭信号。在下一个十年开始前，你必须找到你的N，否则外部成就感会彻底蒸发。',
+    cases:[
+      {av:'✍️',name:'安·玛丽·斯劳特',role:'普林斯顿教授·《为何女性仍然无法拥有一切》作者',desc:'在外交政策核心圈位居高位，却因本性力与实际生活严重错位，最终选择公开反思"完美成功"的代价，引发全球女性职场大讨论。'},
+      {av:'🌙',name:'许多咨询/投行离职女性',role:'经典转型案例群体',desc:'离开高薪后反而效能大幅提升——当工作与本性重新对齐，「不需要意志力也能全力以赴」的状态才会出现，这是真正可持续的职业能量。'}
+    ]
+  },
+
+  wounded: {
+    icon:'💔', title:'带伤创业者',
+    grad:'linear-gradient(135deg,#2a0505,#4a0f0f)', border:'var(--danger)',
+    tags:[{l:'勇气满分',c:'var(--warn)'},{l:'本性根基不稳',c:'var(--danger)'}],
+    sub:'你选择了创业，但本性力尚未稳固时就出发，导致方向漂移、动力断续。这次失败是宝贵的学费：先回去补本性力，搞清楚「你真正要解决的问题是什么」，再次出发成功率将大幅提高。',
+    cases:[
+      {av:'🍽️',name:'张兰',role:'俏江南创始人',desc:'创业热情和商业本性毋庸置疑，但在资本运作和组织管理的硬通货力上出现严重短板，最终导致品牌折戟。热情是起点，但不能替代系统的商业能力。'},
+      {av:'🔄',name:'连续女性创业者群体',role:'经典迭代路径',desc:'多数研究显示，女性连续创业者的第二次成功率远高于第一次——第一次试错找清本性与方向，第二次才真正发力。失败是学费，不是终点。'}
+    ]
+  },
+
+  evolving: {
+    icon:'🌀', title:'持续进化中',
+    grad:'linear-gradient(135deg,#1a1a2e,#2a2a4e)', border:'var(--pro)',
+    tags:[{l:'均衡稳健',c:'var(--muted)'},{l:'尚无突出壁垒',c:'var(--warn)'}],
+    sub:'你各方面都还OK，但还没有形成真正的差异化壁垒。此刻需要一个决断：在三力中选一个「主轴」深度突破，而非继续均匀分散。中庸在职场长跑中，是最温和的慢性风险。',
+    cases:[
+      {av:'🌱',name:'大多数中层女性管理者',role:'均衡但无壁垒',desc:'三力平均，最容易在组织变革中被「优化」——不是因为不够好，而是因为没有让人一秒记住你的核心标签。'},
+      {av:'⚡',name:'突破者共同特征',role:'做了一个「不均衡」的大赌注',desc:'几乎所有实现真正跨越的女性职业者，都在某一刻做了一个「把某一项推到极致」的决断，从而把自己从平均线上拉出来。'}
+    ]
+  }
+};
+
+function showEnding(){
+  const P=state.P, H=state.H, N=state.N, total=P+H+N;
+  let key='evolving';
+
+  if(total>=25&&N>=7&&P>=7&&H>=7) key='apex';
+  else if(P>=8&&N>=6&&H<=6) key='expert';
+  else if(H>=8&&P<=6) key='manager';
+  else if(N>=8&&total<=18) key='dreamer';
+  else if(N<=4&&total>=20) key='burnout';
+  else if(state.choices.includes('ch4:A')&&N<=5) key='wounded';
+  else if(P>=7&&N>=5&&H>=5) key='expert';
+  else if(H>=7&&P>=5) key='manager';
+
+  const e=ENDINGS[key];
+
+  document.getElementById('ending-content').innerHTML=`
+    <div class="ending-card" style="background:${e.grad};border-color:${e.border}">
+      <div class="ending-icon">${e.icon}</div>
+      <h2>${e.title}</h2>
+      <div class="ending-tags">
+        ${e.tags.map(t=>`<span class="ending-tag" style="border-color:${t.c};color:${t.c}">${t.l}</span>`).join('')}
+      </div>
+      <p class="ending-sub">${e.sub}</p>
+    </div>`;
+
+  renderStats('ending-stats','最终三力评估');
+
+  const recP = P<=5 ? `<div class="diagnosis-item"><span class="di-icon">🔧</span><span><strong style="color:var(--pro)">专业力需加强（${P}分）：</strong>找到一个具体的专业方向，系统深耕而非广泛涉猎，先把一个领域做到前10%</span></div>` : '';
+  const recH = H<=5 ? `<div class="diagnosis-item"><span class="di-icon">⚡</span><span><strong style="color:var(--hard)">硬通货力需加强（${H}分）：</strong>主动接项目管理任务，练习结构化表达、向上汇报和跨部门推动，这些是晋升最关键的通行证</span></div>` : '';
+  const recN = N<=5 ? `<div class="diagnosis-item"><span class="di-icon">🌸</span><span><strong style="color:var(--soul)">本性力需激活（${N}分）：</strong>做价值观梳理，记录「心流时刻」，找到让你不需要意志力也能投入的事，这是一切的地基</span></div>` : '';
+  const recAll = !recP&&!recH&&!recN ? `<div class="diagnosis-item"><span class="di-icon">✅</span><span>三力状态良好，现在的任务是找到三力的<strong>交叉整合点</strong>，构建只属于你的独特壁垒。</span></div>` : '';
+
+  document.getElementById('ending-diagnosis').innerHTML=`<h4>📋 行动建议</h4>${recP}${recH}${recN}${recAll}`;
+
+  document.getElementById('ending-cases').innerHTML=e.cases.map(c=>`
+    <div class="case-card">
+      <div class="case-avatar">${c.av}</div>
+      <div>
+        <div class="case-name">${c.name}</div>
+        <div class="case-role">${c.role}</div>
+        <div class="case-desc">${c.desc}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ════════════════ RESTART ════════════════
+function restart(){
+  state.P=3; state.H=3; state.N=3; state.arch='tech'; state.choices=[];
+  selectedArch=null;
+  ['pv','hv','nv'].forEach(id=>{
+    document.getElementById(id).value=3;
+    document.getElementById(id+'-label').textContent='3';
+  });
+  document.querySelectorAll('#archetype-grid .choice-btn').forEach(b=>b.style.borderColor='');
+  goTo('s-assess');
+}
+</script>
+</body>
+</html>
