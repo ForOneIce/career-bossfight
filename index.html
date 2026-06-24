@@ -228,9 +228,33 @@
   .choice-btn.tag-hard-border { border-left-color: var(--hard); }
   .choice-btn.tag-soul-border { border-left-color: var(--soul); }
 
-  .choice-effect { font-size: .76rem; color: var(--muted); margin-top: 8px; padding-top: 6px; border-top: 1px dashed #f0d4dc; }
+  .choice-effect {
+    font-size: .76rem; color: var(--muted); margin-top: 8px;
+    padding-top: 6px; border-top: 1px dashed #f0d4dc;
+    position: relative; overflow: hidden;
+  }
   .effect-pos { color: var(--success); }
   .effect-neg { color: var(--danger); }
+
+  /* ── SCRATCH COVER ── */
+  .scratch-cover {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    cursor: pointer; user-select: none;
+    background: repeating-linear-gradient(
+      120deg,
+      #f5e0e8 0px, #f5e0e8 4px,
+      #f0d4dc 4px, #f0d4dc 8px
+    );
+    border-radius: 6px;
+    font-size: .74rem; color: #c09aaa; font-weight: 600;
+    letter-spacing: .5px;
+    transition: opacity .4s, transform .3s;
+  }
+  .scratch-cover::before { content: '🎴'; font-size: .9rem; }
+  .scratch-cover.revealed {
+    opacity: 0; transform: scale(1.05); pointer-events: none;
+  }
 
   /* ── SELF-CHECK ── */
   .slider-group { margin-bottom: 16px; }
@@ -903,6 +927,18 @@ function makeTip(quote, note){
     ${note ? `<div class="tip-src">${note}</div>` : ''}
   </div>`;
 }
+function addScratchCovers(containerId){
+  document.querySelectorAll('#'+containerId+' .choice-effect').forEach(el=>{
+    const cover=document.createElement('div');
+    cover.className='scratch-cover';
+    cover.textContent='轻触查看能力变化';
+    cover.addEventListener('click',function(e){
+      e.stopPropagation();
+      this.classList.add('revealed');
+    });
+    el.appendChild(cover);
+  });
+}
 
 // ════════════════ SETUP ════════════════
 let selectedArch=null;
@@ -984,6 +1020,7 @@ function loadChapter1(){
       </div>
     </div>
     </div>`;
+  addScratchCovers('ch1-choices');
 }
 function ch1Choice(c){
   state.choices.push('ch1:'+c);
@@ -1059,6 +1096,7 @@ function loadChapter2(){
       </div>
     </div>
     </div>`;
+  addScratchCovers('ch2-choices');
 }
 function ch2Choice(c){
   state.choices.push('ch2:'+c);
@@ -1139,6 +1177,7 @@ function loadChapter3(){
       </div>
     </div>
     </div>`;
+  addScratchCovers('ch3-choices');
 }
 function ch3Choice(c){
   state.choices.push('ch3:'+c);
@@ -1218,6 +1257,7 @@ function loadChapter4(){
       </div>
     </div>
     </div>`;
+  addScratchCovers('ch4-choices');
 }
 function ch4Choice(c){
   state.choices.push('ch4:'+c);
