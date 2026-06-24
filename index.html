@@ -477,7 +477,14 @@
   .fp-link-fire { background: #fff5eb; color: #e67e22; }
   .fp-link-fire:hover { background: #ffecda; }
 
+  .fp-link-kofi { background: #fff8eb; color: #ff5e5b; }
+  .fp-link-kofi:hover { background: #ffefda; }
+
+  .fab-top-left { position: fixed; top: 18px; left: 18px; bottom: auto; }
   .fab-top-right { position: fixed; top: 18px; right: 18px; bottom: auto; }
+  .fab-popup-top-left {
+    position: fixed; top: 70px; left: 18px; bottom: auto;
+  }
   .fab-popup-top-right {
     position: fixed; top: 70px; right: 18px; bottom: auto;
   }
@@ -818,6 +825,13 @@
 </div>
 
 <!-- ═══ 浮窗 ═══ -->
+<div class="fab fab-top-left" onclick="togglePopup('kofi')">☕</div>
+<div class="fab-popup fab-popup-top-left" id="popup-kofi">
+  <div class="fp-name">☕ Buy Me a Coffee</div>
+  <div class="fp-role">如果这个游戏对你有启发，请我喝杯咖啡吧</div>
+  <a class="fp-link fp-link-kofi" href="https://ko-fi.com/iceflake0" target="_blank" rel="noopener">→ 去 Ko-fi 支持</a>
+</div>
+
 <div class="fab fab-left" onclick="togglePopup('dev')">🧊</div>
 <div class="fab-popup fab-popup-left" id="popup-dev">
   <div class="fp-name">🧊 ForOneIce</div>
